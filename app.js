@@ -1,335 +1,15 @@
 /*
- * The question bank is deliberately tied to the checked unit/chapter names.
+ * Unit practice packs. The first three units of each subject are the active
+ * beginning-of-term scope requested by the parent. Every active unit has ten
+ * 10-point items, for a 100-point unit paper.
  *
- * Sources and version boundaries are documented in README.md and in the notice
- * on the page. In particular, Shanghai schools may use different English
- * books. The English items below only practise words that appear in the
- * publicly checked unit titles; they do not pretend to reproduce an unverified
- * text or word list.
+ * Chinese questions use checked 2024 textbook texts and stories. Mathematics
+ * questions use the checked unit lesson topics. The English school version has
+ * been confirmed as the Shanghai five-four 2024 new textbook, but the public
+ * sources do not expose its full student word lists; therefore the first three
+ * English packs remain explicitly title-word practice rather than invented
+ * textbook dialogues.
  */
-const DAILY_QUESTIONS = [
-  // 统编版（2024）五四制·语文二年级上册：八个单元
-  {
-    id: 'ch-u1',
-    subject: 'chinese',
-    unit: '第一单元·阅读',
-    lesson: '《小蝌蚪找妈妈》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '小蝌蚪在找妈妈的过程中，先长出了哪一部分？',
-    options: ['两条后腿', '两条前腿', '一条长尾巴'],
-    answer: 0,
-    explanation: '课文按成长顺序写到：小蝌蚪先长出两条后腿，后来又长出两条前腿。'
-  },
-  {
-    id: 'ch-u2',
-    subject: 'chinese',
-    unit: '第二单元·识字',
-    lesson: '《田家四季歌》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '“秋季里，稻上场，谷像黄金粒粒香”写的是哪个季节？',
-    options: ['春季', '秋季', '冬季'],
-    answer: 1,
-    explanation: '“稻上场，谷像黄金”写的是秋天丰收的景象。'
-  },
-  {
-    id: 'ch-u3',
-    subject: 'chinese',
-    unit: '第三单元·阅读',
-    lesson: '《数星星的孩子》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '《数星星的孩子》里的孩子是谁？',
-    options: ['张衡', '李白', '鲁班'],
-    answer: 0,
-    explanation: '课文写的是小时候喜欢观察星星、后来成为天文学家的张衡。'
-  },
-  {
-    id: 'ch-u4',
-    subject: 'chinese',
-    unit: '第四单元·阅读',
-    lesson: '《黄山奇石》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '《黄山奇石》中的“仙桃石”看起来像什么？',
-    options: ['一个大桃子', '一只小船', '一头狮子'],
-    answer: 0,
-    explanation: '课文把形状像桃子的巨石叫作“仙桃石”。'
-  },
-  {
-    id: 'ch-u5',
-    subject: 'chinese',
-    unit: '第五单元·阅读',
-    lesson: '《坐井观天》',
-    topic: '寓言理解',
-    icon: '语',
-    prompt: '《坐井观天》中，青蛙认为天有多大？',
-    options: ['井口那么大', '房间那么大', '大海那么大'],
-    answer: 0,
-    explanation: '青蛙一直坐在井里，所以它以为天只有井口那么大。'
-  },
-  {
-    id: 'ch-u6',
-    subject: 'chinese',
-    unit: '第六单元·阅读',
-    lesson: '《难忘的泼水节》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '《难忘的泼水节》里，和傣族人民一起过节的伟人是？',
-    options: ['周恩来', '张衡', '曹冲'],
-    answer: 0,
-    explanation: '课文写周恩来总理和傣族人民一起度过了难忘的泼水节。'
-  },
-  {
-    id: 'ch-u7',
-    subject: 'chinese',
-    unit: '第七单元·阅读',
-    lesson: '《雪孩子》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '《雪孩子》中，雪孩子帮助了谁？',
-    options: ['小白兔', '小松鼠', '小青蛙'],
-    answer: 0,
-    explanation: '小白兔家着火时，雪孩子勇敢地去救小白兔。'
-  },
-  {
-    id: 'ch-u8',
-    subject: 'chinese',
-    unit: '第八单元·阅读',
-    lesson: '《纸船和风筝》',
-    topic: '课文理解',
-    icon: '语',
-    prompt: '《纸船和风筝》中的纸船和风筝带来了什么？',
-    options: ['松鼠和小熊的友谊', '一场热闹的比赛', '一顿香甜的午餐'],
-    answer: 0,
-    explanation: '纸船和风筝让松鼠和小熊传递心意，重新成为好朋友。'
-  },
-
-  // 沪少儿沪教版数学（试用本）二年级第一学期：七个单元
-  {
-    id: 'ma-u1',
-    subject: 'math',
-    unit: '第一单元·100以内数的加减法（二）',
-    lesson: '两位数退位减法',
-    topic: '口算与笔算',
-    icon: '＋',
-    kind: 'input',
-    prompt: '算一算：52 − 27 =',
-    answer: '25',
-    answerText: '25',
-    placeholder: '写出得数',
-    explanation: '个位 2 不够减 7，要从十位借 1 个十；52－27＝25。'
-  },
-  {
-    id: 'ma-u2',
-    subject: 'math',
-    unit: '第二单元·欢乐购物街',
-    lesson: '认识人民币与购物',
-    topic: '生活中的数学',
-    icon: '＋',
-    prompt: '一支铅笔 3 元，一块橡皮 2 元，买这两样一共要几元？',
-    options: ['5 元', '6 元', '1 元'],
-    answer: 0,
-    explanation: '把两样物品的价钱合起来：3＋2＝5（元）。'
-  },
-  {
-    id: 'ma-u3',
-    subject: 'math',
-    unit: '第三单元·表内乘法',
-    lesson: '乘法引入与乘法口诀',
-    topic: '乘法',
-    icon: '＋',
-    prompt: '5 个 2 相加，5×2 的得数是多少？',
-    options: ['7', '10', '12'],
-    answer: 1,
-    explanation: '5×2 表示 5 个 2 相加，2＋2＋2＋2＋2＝10。'
-  },
-  {
-    id: 'ma-u4',
-    subject: 'math',
-    unit: '第四单元·我的学校我的家',
-    lesson: '方位与位置',
-    topic: '方向辨认',
-    icon: '＋',
-    prompt: '小明站在教室门口，图书馆在他的右边。图书馆在他的哪边？',
-    options: ['右边', '左边', '后面'],
-    answer: 0,
-    explanation: '题目已经说明图书馆在小明的右边，所以答案是“右边”。'
-  },
-  {
-    id: 'ma-u5',
-    subject: 'math',
-    unit: '第五单元·分类',
-    lesson: '按特征分类',
-    topic: '分类整理',
-    icon: '＋',
-    prompt: '下面哪一组可以分在“水果”一类？',
-    options: ['苹果、香蕉', '铅笔、橡皮', '书包、尺'],
-    answer: 0,
-    explanation: '苹果和香蕉都有“水果”这个共同特征，可以分为一类。'
-  },
-  {
-    id: 'ma-u6',
-    subject: 'math',
-    unit: '第六单元·数学广场',
-    lesson: '有序思考与搭配',
-    topic: '数学思考',
-    icon: '＋',
-    prompt: '有红、黄两顶帽子和蓝、白两条围巾，选一顶帽子和一条围巾，一共有几种搭配？',
-    options: ['2 种', '4 种', '6 种'],
-    answer: 1,
-    explanation: '每顶帽子都能和 2 条围巾搭配：2×2＝4（种）。'
-  },
-  {
-    id: 'ma-u7',
-    subject: 'math',
-    unit: '第七单元·复习',
-    lesson: '本册知识回顾',
-    topic: '综合复习',
-    icon: '＋',
-    kind: 'input',
-    prompt: '复习一下：36＋24＝',
-    answer: '60',
-    answerText: '60',
-    placeholder: '写出得数',
-    explanation: '先算 30＋20＝50，再算 6＋4＝10，合起来是 60。'
-  },
-
-  // 沪教版（五四制·2024）新教材公开目录中的单元标题词。
-  // 上海官方用书目录同时提示英语由学校选择版本，所以这里不扩展未核对的课文词汇。
-  {
-    id: 'en-u1',
-    subject: 'english',
-    unit: 'Unit 1 · My morning',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 1 “My morning” 里的 morning 是什么意思？',
-    options: ['早晨', '房间', '水果'],
-    answer: 0,
-    explanation: 'morning 是“早晨”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u2',
-    subject: 'english',
-    unit: 'Unit 2 · My room',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 2 “My room” 里的 room 是什么意思？',
-    options: ['房间', '海洋', '季节'],
-    answer: 0,
-    explanation: 'room 是“房间”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u3',
-    subject: 'english',
-    unit: 'Unit 3 · On the way',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 3 “On the way” 的意思是：',
-    options: ['在路上', '在天空中', '在海里'],
-    answer: 0,
-    explanation: 'on the way 是“在路上”。本题只练习已核对的单元标题短语。'
-  },
-  {
-    id: 'en-u4',
-    subject: 'english',
-    unit: 'Unit 4 · Playing sports',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 4 “Playing sports” 的意思和哪一项最接近？',
-    options: ['做运动', '吃水果', '看星星'],
-    answer: 0,
-    explanation: 'playing sports 是“做运动”。本题只练习已核对的单元标题短语。'
-  },
-  {
-    id: 'en-u5',
-    subject: 'english',
-    unit: 'Unit 5 · In the sky',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 5 “In the sky” 里的 sky 是什么意思？',
-    options: ['天空', '房间', '水果'],
-    answer: 0,
-    explanation: 'sky 是“天空”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u6',
-    subject: 'english',
-    unit: 'Unit 6 · In the sea',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 6 “In the sea” 里的 sea 是什么意思？',
-    options: ['海洋', '学校', '早晨'],
-    answer: 0,
-    explanation: 'sea 是“海洋”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u7',
-    subject: 'english',
-    unit: 'Unit 7 · Seasons',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 7 “Seasons” 主要和什么有关？',
-    options: ['季节', '房间', '运动'],
-    answer: 0,
-    explanation: 'Seasons 是“季节”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u8',
-    subject: 'english',
-    unit: 'Unit 8 · Yummy fruit',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: 'Unit 8 “Yummy fruit” 里的 fruit 是什么意思？',
-    options: ['水果', '天空', '海洋'],
-    answer: 0,
-    explanation: 'fruit 是“水果”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u9',
-    subject: 'english',
-    unit: 'Unit 9 · The five senses',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: '“The five senses” 里的 five 是几？',
-    options: ['3', '5', '10'],
-    answer: 1,
-    explanation: 'five 是“5”。本题只练习已核对的单元标题词。'
-  },
-  {
-    id: 'en-u10',
-    subject: 'english',
-    unit: 'Unit 10 · This is me',
-    lesson: '单元标题',
-    topic: '标题词义',
-    icon: 'A',
-    titleOnly: true,
-    prompt: '“This is me” 的意思是：',
-    options: ['这是我', '这是我的房间', '这是水果'],
-    answer: 0,
-    explanation: 'This is me 是“这是我”。本题只练习已核对的单元标题短语。'
-  }
-];
-
 const SUBJECTS = {
   chinese: { name: '语文', short: '语', labelClass: 'chinese-label', progressClass: 'chinese-progress' },
   math: { name: '数学', short: '＋', labelClass: 'math-label', progressClass: 'math-progress' },
@@ -337,46 +17,193 @@ const SUBJECTS = {
 };
 const SUBJECT_ORDER = Object.keys(SUBJECTS);
 
-// One question is kept for each unit in the small practice bank. The catalog
-// below keeps the navigation unit-based even when a school is still at the
-// beginning of term. More lessons can be added to a unit without changing the
-// progress and navigation model.
 const UNIT_CATALOG = {
   chinese: [
-    { id: 'ch-u1', title: '第一单元·阅读', lessons: '小蝌蚪找妈妈、我是什么、植物妈妈有办法' },
-    { id: 'ch-u2', title: '第二单元·识字', lessons: '场景歌、树之歌、拍手歌、田家四季歌' },
-    { id: 'ch-u3', title: '第三单元·阅读', lessons: '彩虹、去外婆家、数星星的孩子' },
-    { id: 'ch-u4', title: '第四单元·阅读', lessons: '古诗二首、黄山奇石、日月潭、葡萄沟' },
-    { id: 'ch-u5', title: '第五单元·阅读', lessons: '坐井观天、寒号鸟、我要的是葫芦' },
-    { id: 'ch-u6', title: '第六单元·阅读', lessons: '八角楼上、朱德的扁担、难忘的泼水节、刘胡兰' },
-    { id: 'ch-u7', title: '第七单元·阅读', lessons: '古诗二首（江雪、敕勒歌）、雾在哪里、雪孩子' },
-    { id: 'ch-u8', title: '第八单元·阅读', lessons: '称赞、纸船和风筝、快乐的小河' }
+    { id: 'ch-u1', title: '第一单元·阅读', lessons: '小蝌蚪找妈妈、我是什么、植物妈妈有办法', available: true },
+    { id: 'ch-u2', title: '第二单元·识字', lessons: '场景歌、树之歌、拍手歌、田家四季歌', available: true },
+    { id: 'ch-u3', title: '第三单元·阅读', lessons: '彩虹、去外婆家、数星星的孩子', available: true },
+    { id: 'ch-u4', title: '第四单元·阅读', lessons: '古诗二首、黄山奇石、日月潭、葡萄沟', available: false },
+    { id: 'ch-u5', title: '第五单元·阅读', lessons: '坐井观天、寒号鸟、我要的是葫芦', available: false },
+    { id: 'ch-u6', title: '第六单元·阅读', lessons: '八角楼上、朱德的扁担、难忘的泼水节、刘胡兰', available: false },
+    { id: 'ch-u7', title: '第七单元·阅读', lessons: '古诗二首（江雪、敕勒歌）、雾在哪里、雪孩子', available: false },
+    { id: 'ch-u8', title: '第八单元·阅读', lessons: '称赞、纸船和风筝、快乐的小河', available: false }
   ],
   math: [
-    { id: 'ma-u1', title: '第一单元·100以内数的加减法（二）', lessons: '两位数减法、比多与少' },
-    { id: 'ma-u2', title: '第二单元·欢乐购物街', lessons: '认识人民币、一起来购物' },
-    { id: 'ma-u3', title: '第三单元·表内乘法', lessons: '乘法引入、5的乘法、2、4、8的乘法、7的乘法' },
-    { id: 'ma-u4', title: '第四单元·我的学校我的家', lessons: '方位与位置' },
-    { id: 'ma-u5', title: '第五单元·分类', lessons: '按特征分类' },
-    { id: 'ma-u6', title: '第六单元·数学广场', lessons: '有序思考与搭配' },
-    { id: 'ma-u7', title: '第七单元·复习', lessons: '本册知识回顾' }
+    { id: 'ma-u1', title: '第一单元·100以内数的加减法（二）', lessons: '两位数减法、比多与少', available: true },
+    { id: 'ma-u2', title: '第二单元·欢乐购物街', lessons: '认识人民币、一起来购物', available: true },
+    { id: 'ma-u3', title: '第三单元·表内乘法', lessons: '乘法引入、5的乘法、2、4、8的乘法、7的乘法', available: true },
+    { id: 'ma-u4', title: '第四单元·我的学校我的家', lessons: '方位与位置', available: false },
+    { id: 'ma-u5', title: '第五单元·分类', lessons: '按特征分类', available: false },
+    { id: 'ma-u6', title: '第六单元·数学广场', lessons: '有序思考与搭配', available: false },
+    { id: 'ma-u7', title: '第七单元·复习', lessons: '本册知识回顾', available: false }
   ],
   english: [
-    { id: 'en-u1', title: 'Unit 1 · My morning', lessons: '单元标题词义练习' },
-    { id: 'en-u2', title: 'Unit 2 · My room', lessons: '单元标题词义练习' },
-    { id: 'en-u3', title: 'Unit 3 · On the way', lessons: '单元标题词义练习' },
-    { id: 'en-u4', title: 'Unit 4 · Playing sports', lessons: '单元标题词义练习' },
-    { id: 'en-u5', title: 'Unit 5 · In the sky', lessons: '单元标题词义练习' },
-    { id: 'en-u6', title: 'Unit 6 · In the sea', lessons: '单元标题词义练习' },
-    { id: 'en-u7', title: 'Unit 7 · Seasons', lessons: '单元标题词义练习' },
-    { id: 'en-u8', title: 'Unit 8 · Yummy fruit', lessons: '单元标题词义练习' },
-    { id: 'en-u9', title: 'Unit 9 · The five senses', lessons: '单元标题词义练习' },
-    { id: 'en-u10', title: 'Unit 10 · This is me', lessons: '单元标题词义练习' }
+    { id: 'en-u1', title: 'Unit 1 · My morning', lessons: '标题词义100分入门练习', available: true, titleOnly: true },
+    { id: 'en-u2', title: 'Unit 2 · My room', lessons: '标题词义100分入门练习', available: true, titleOnly: true },
+    { id: 'en-u3', title: 'Unit 3 · On the way', lessons: '标题词义100分入门练习', available: true, titleOnly: true },
+    { id: 'en-u4', title: 'Unit 4 · Playing sports', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u5', title: 'Unit 5 · In the sky', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u6', title: 'Unit 6 · In the sea', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u7', title: 'Unit 7 · Seasons', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u8', title: 'Unit 8 · Yummy fruit', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u9', title: 'Unit 9 · The five senses', lessons: '待按课本正文核对', available: false, titleOnly: true },
+    { id: 'en-u10', title: 'Unit 10 · This is me', lessons: '待按课本正文核对', available: false, titleOnly: true }
   ]
 };
-const STARTER_UNIT_IDS = ['ch-u1', 'ma-u1', 'en-u1'];
+const UNIT_INFO = Object.fromEntries(SUBJECT_ORDER.flatMap((subject) => UNIT_CATALOG[subject].map((unit) => [unit.id, { ...unit, subject }])));
+const STARTER_UNIT_IDS = SUBJECT_ORDER.map((subject) => UNIT_CATALOG[subject][0].id);
+const ACTIVE_UNIT_IDS = SUBJECT_ORDER.flatMap((subject) => UNIT_CATALOG[subject].filter((unit) => unit.available).map((unit) => unit.id));
+
+function makeChoice(id, unitId, lesson, prompt, options, answer, explanation, extra = {}) {
+  const info = UNIT_INFO[unitId];
+  return {
+    id,
+    subject: info.subject,
+    unitId,
+    unit: info.title,
+    lesson,
+    topic: extra.topic || '单元练习',
+    icon: SUBJECTS[info.subject].short,
+    points: 10,
+    prompt,
+    options,
+    answer,
+    explanation,
+    ...extra
+  };
+}
+
+function makeInput(id, unitId, lesson, prompt, answer, explanation, extra = {}) {
+  const info = UNIT_INFO[unitId];
+  return {
+    id,
+    subject: info.subject,
+    unitId,
+    unit: info.title,
+    lesson,
+    topic: extra.topic || '单元练习',
+    icon: SUBJECTS[info.subject].short,
+    points: 10,
+    kind: 'input',
+    prompt,
+    answer: String(answer),
+    answerText: String(answer),
+    placeholder: '写出答案',
+    explanation,
+    ...extra
+  };
+}
+
+const DAILY_QUESTIONS = [
+  // 语文第一单元：小蝌蚪找妈妈、我是什么、植物妈妈有办法
+  makeChoice('ch-u1-01', 'ch-u1', '《小蝌蚪找妈妈》', '小蝌蚪在找妈妈的过程中，先长出了哪一部分？', ['两条后腿', '两条前腿', '一条长尾巴'], 0, '课文按成长顺序写到：小蝌蚪先长出两条后腿，后来又长出两条前腿。', { topic: '课文理解' }),
+  makeChoice('ch-u1-02', 'ch-u1', '《小蝌蚪找妈妈》', '小蝌蚪最先遇到了谁？', ['鲤鱼妈妈', '乌龟', '青蛙妈妈'], 0, '小蝌蚪先看见鲤鱼妈妈在教小鲤鱼捕食。', { topic: '课文理解' }),
+  makeChoice('ch-u1-03', 'ch-u1', '《小蝌蚪找妈妈》', '鲤鱼妈妈告诉小蝌蚪，青蛙妈妈有什么特点？', ['四条腿、宽嘴巴', '长长的尾巴、黑灰色身子', '一对翅膀、尖尖的嘴'], 0, '“四条腿、宽嘴巴”是鲤鱼妈妈说的青蛙特征。', { topic: '课文理解' }),
+  makeChoice('ch-u1-04', 'ch-u1', '《小蝌蚪找妈妈》', '最后，小蝌蚪长成了什么？', ['小青蛙', '小鲤鱼', '小乌龟'], 0, '小蝌蚪经过成长变化，最后长成了小青蛙。', { topic: '课文理解' }),
+  makeChoice('ch-u1-05', 'ch-u1', '《我是什么》', '《我是什么》里的“我”指的是什么？', ['水', '风', '树叶'], 0, '课文中的“我”会变成云、雨、冰雹和雪，所以“我”是水。', { topic: '课文理解' }),
+  makeChoice('ch-u1-06', 'ch-u1', '《我是什么》', '水可以变成下面哪一组事物？', ['云、雨、冰雹和雪', '花、草、树和鸟', '书、笔、本和尺'], 0, '课文写到水在不同情况下会变成云、雨、冰雹和雪。', { topic: '课文理解' }),
+  makeChoice('ch-u1-07', 'ch-u1', '《我是什么》', '课文说“我有时候很温和，有时候很暴躁”，这里的“我”是谁？', ['水', '星星', '植物'], 0, '水有温和的一面，也有可能带来洪水等暴躁的一面。', { topic: '课文理解' }),
+  makeChoice('ch-u1-08', 'ch-u1', '《植物妈妈有办法》', '蒲公英妈妈靠什么传播种子？', ['降落伞', '带刺的铠甲', '豆荚'], 0, '蒲公英的种子像降落伞，靠风把它们吹走。', { topic: '课文理解' }),
+  makeChoice('ch-u1-09', 'ch-u1', '《植物妈妈有办法》', '苍耳妈妈给孩子准备了什么？', ['带刺的铠甲', '轻轻的翅膀', '一把小雨伞'], 0, '苍耳的种子带刺，容易挂在动物的皮毛上。', { topic: '课文理解' }),
+  makeChoice('ch-u1-10', 'ch-u1', '《植物妈妈有办法》', '豌豆妈妈让豆荚怎样帮助孩子？', ['晒在太阳底下炸开', '放在水里漂走', '藏进泥土里'], 0, '豌豆妈妈把豆荚晒在太阳底下，豆荚炸开，种子就蹦着离开。', { topic: '课文理解' }),
+
+  // 语文第二单元：识字
+  makeChoice('ch-u2-01', 'ch-u2', '《场景歌》', '“一只海鸥，一条帆船”中，帆船的量词是哪个？', ['条', '只', '座'], 0, '“一条帆船”是课文中的量词搭配。', { topic: '量词识字' }),
+  makeChoice('ch-u2-02', 'ch-u2', '《场景歌》', '课文中“一艘军舰，一处港湾”的量词分别是？', ['艘、处', '只、条', '方、块'], 0, '军舰用“艘”，港湾用“处”。', { topic: '量词识字' }),
+  makeChoice('ch-u2-03', 'ch-u2', '《树之歌》', '“杨树高，榕树壮”写出了榕树什么特点？', ['粗壮', '很矮', '叶子红'], 0, '“壮”说明榕树长得粗壮。', { topic: '树木识字' }),
+  makeChoice('ch-u2-04', 'ch-u2', '《树之歌》', '哪一种树的叶子像手掌？', ['梧桐树', '枫树', '松树'], 0, '课文写“梧桐树叶像手掌”。', { topic: '树木识字' }),
+  makeChoice('ch-u2-05', 'ch-u2', '《树之歌》', '“枫树秋天叶儿红”写的是哪个季节？', ['秋天', '春天', '冬天'], 0, '枫树在秋天叶子变红。', { topic: '树木识字' }),
+  makeChoice('ch-u2-06', 'ch-u2', '《树之歌》', '“松柏四季披绿装”说明松柏有什么特点？', ['四季常绿', '秋天结果', '春天开花'], 0, '“四季披绿装”说明松柏一年四季都是绿色的。', { topic: '树木识字' }),
+  makeChoice('ch-u2-07', 'ch-u2', '《拍手歌》', '“孔雀锦鸡是伙伴”中，孔雀和锦鸡是什么关系？', ['伙伴', '敌人', '老师和学生'], 0, '课文把孔雀和锦鸡写成一起生活的伙伴。', { topic: '动物识字' }),
+  makeChoice('ch-u2-08', 'ch-u2', '《拍手歌》', '“天空雁群会写字”中的“写字”指雁群怎样飞？', ['排成队形飞过天空', '停在树上不动', '钻进水里游'], 0, '雁群排成队形飞行，看起来像在天空写字。', { topic: '动物识字' }),
+  makeChoice('ch-u2-09', 'ch-u2', '《田家四季歌》', '“春季里，春风吹”写的是哪个季节？', ['春季', '夏季', '秋季'], 0, '句子中直接出现了“春季”。', { topic: '四季识字' }),
+  makeChoice('ch-u2-10', 'ch-u2', '《田家四季歌》', '“稻上场，谷像黄金粒粒香”写的是哪个季节？', ['秋季', '冬季', '春季'], 0, '稻谷成熟、丰收的景象出现在秋季。', { topic: '四季识字' }),
+
+  // 语文第三单元：彩虹、去外婆家、数星星的孩子
+  makeChoice('ch-u3-01', 'ch-u3', '《彩虹》', '《彩虹》中，孩子想拿什么帮爸爸浇田？', ['水壶', '镜子', '秋千'], 0, '孩子想提着爸爸浇花用的水壶，把水洒下来帮爸爸浇田。', { topic: '课文理解' }),
+  makeChoice('ch-u3-02', 'ch-u3', '《彩虹》', '《彩虹》中，孩子想把什么挂到彩虹桥上？', ['妈妈的镜子', '爸爸的水壶', '哥哥的书包'], 0, '孩子想把妈妈梳头用的镜子挂在彩虹桥上。', { topic: '课文理解' }),
+  makeChoice('ch-u3-03', 'ch-u3', '《彩虹》', '《彩虹》中，孩子想坐着什么荡来荡去？', ['秋千', '小船', '木马'], 0, '孩子想坐着秋千在彩虹桥上荡来荡去。', { topic: '课文理解' }),
+  makeChoice('ch-u3-04', 'ch-u3', '《去外婆家》', '《去外婆家》中提到的果子有哪一组？', ['山楂、柿子、毛栗子', '苹果、香蕉、西瓜', '桃子、葡萄、草莓'], 0, '山楂、柿子和毛栗子是课文中写到的果子。', { topic: '课文理解' }),
+  makeChoice('ch-u3-05', 'ch-u3', '《去外婆家》', '去外婆家的路上，孩子看到了哪种小鸟？', ['小山雀', '小燕子', '小白兔'], 0, '课文写到路上遇见了小山雀。', { topic: '课文理解' }),
+  makeChoice('ch-u3-06', 'ch-u3', '《去外婆家》', '课文中提到的花是？', ['杜鹃花', '荷花', '菊花'], 0, '杜鹃花是《去外婆家》中出现的花。', { topic: '课文理解' }),
+  makeChoice('ch-u3-07', 'ch-u3', '《数星星的孩子》', '《数星星的孩子》中的孩子是谁？', ['张衡', '曹冲', '李白'], 0, '课文写的是小时候喜欢观察星星的张衡。', { topic: '课文理解' }),
+  makeChoice('ch-u3-08', 'ch-u3', '《数星星的孩子》', '张衡数的星星中，哪一组像一把勺子？', ['北斗七星', '北极星', '太阳'], 0, '北斗七星排列起来像一把勺子。', { topic: '课文理解' }),
+  makeChoice('ch-u3-09', 'ch-u3', '《数星星的孩子》', '课文中提到的北极星有什么特点？', ['位置好像不动', '每天都会落下', '会变成月亮'], 0, '课文通过观察说明北极星的位置好像不动。', { topic: '课文理解' }),
+  makeChoice('ch-u3-10', 'ch-u3', '《数星星的孩子》', '张衡长大后成了什么样的人？', ['著名的天文学家', '一名船夫', '一位画家'], 0, '张衡长大后成了著名的天文学家。', { topic: '课文理解' }),
+
+  // 数学第一单元：100以内数的加减法（二）
+  makeInput('ma-u1-01', 'ma-u1', '两位数退位减法', '算一算：52 − 27 =', 25, '个位 2 不够减 7，要从十位借 1 个十；52－27＝25。'),
+  makeInput('ma-u1-02', 'ma-u1', '两位数不退位减法', '算一算：68 − 24 =', 44, '个位 8－4＝4，十位 6－2＝4，所以得 44。'),
+  makeInput('ma-u1-03', 'ma-u1', '两位数减一位数', '算一算：75 − 8 =', 67, '个位 5 不够减 8，要借 1 个十，75－8＝67。'),
+  makeInput('ma-u1-04', 'ma-u1', '两位数减整十数', '算一算：63 − 40 =', 23, '减去 4 个十，十位 6－4＝2，个位不变，得 23。'),
+  makeInput('ma-u1-05', 'ma-u1', '两位数退位减法', '算一算：94 − 36 =', 58, '个位 4 不够减 6，借位后计算，94－36＝58。'),
+  makeChoice('ma-u1-06', 'ma-u1', '解决问题：比多与少', '小红有 42 张贴纸，小明有 35 张。小红比小明多几张？', ['7 张', '77 张', '6 张'], 0, '求相差多少用减法：42－35＝7（张）。'),
+  makeInput('ma-u1-07', 'ma-u1', '两位数退位减法', '算一算：57 − 29 =', 28, '57－29＝28，个位退位后再计算十位。'),
+  makeChoice('ma-u1-08', 'ma-u1', '解决问题：比多与少', '54 −（　）＝27，括号里应填几？', ['27', '81', '17'], 0, '被减数减差等于减数：54－27＝27。'),
+  makeChoice('ma-u1-09', 'ma-u1', '解决问题：比多与少', '图书角有 63 本书，借走 28 本，还剩多少本？', ['35 本', '91 本', '45 本'], 0, '求还剩多少用减法：63－28＝35（本）。'),
+  makeInput('ma-u1-10', 'ma-u1', '两位数退位减法', '算一算：80 − 36 =', 44, '80－36＝44，个位 0 不够减 6，需要连续退位。'),
+
+  // 数学第二单元：欢乐购物街
+  makeChoice('ma-u2-01', 'ma-u2', '认识人民币', '1 元等于多少角？', ['10 角', '1 角', '100 角'], 0, '人民币单位换算中，1 元＝10 角。'),
+  makeChoice('ma-u2-02', 'ma-u2', '认识人民币', '下面哪一项表示 2 元 5 角？', ['25 角', '2 角 5 分', '205 元'], 0, '2 元＝20 角，再加 5 角就是 25 角。'),
+  makeChoice('ma-u2-03', 'ma-u2', '一起来购物', '5 元的本子和 2 元的橡皮一共要多少元？', ['7 元', '3 元', '10 元'], 0, '5＋2＝7（元）。'),
+  makeChoice('ma-u2-04', 'ma-u2', '一起来购物', '买 3 元的尺子，付 10 元，应找回多少元？', ['7 元', '13 元', '3 元'], 0, '找回的钱是10－3＝7（元）。'),
+  makeChoice('ma-u2-05', 'ma-u2', '一起来购物', '8 元的文具，可以用哪组钱正好付清？', ['5 元＋2 元＋1 元', '5 元＋1 元', '10 元＋1 元'], 0, '5＋2＋1＝8（元），正好付清。'),
+  makeChoice('ma-u2-06', 'ma-u2', '认识人民币', '3 元 5 角和哪一个金额相同？', ['35 角', '8 角', '305 元'], 0, '3 元＝30 角，30＋5＝35 角。'),
+  makeChoice('ma-u2-07', 'ma-u2', '一起来购物', '小明有 10 元，买了 4 元的本子，还剩多少元？', ['6 元', '14 元', '4 元'], 0, '10－4＝6（元）。'),
+  makeChoice('ma-u2-08', 'ma-u2', '一起来购物', '一支笔 3 元，一块橡皮 2 元，一个本子 4 元，一共多少元？', ['9 元', '8 元', '10 元'], 0, '3＋2＋4＝9（元）。'),
+  makeChoice('ma-u2-09', 'ma-u2', '一起来购物', '小红有 9 元，买了 6 元的玩具，还剩多少元？', ['3 元', '15 元', '6 元'], 0, '9－6＝3（元）。'),
+  makeChoice('ma-u2-10', 'ma-u2', '一起来购物', '下面哪种情况钱不够？商品 8 元，小朋友带着……', ['5 元和 2 元', '5 元、2 元和 1 元', '10 元'], 0, '5＋2＝7 元，小于 8 元，所以钱不够。'),
+
+  // 数学第三单元：表内乘法
+  makeChoice('ma-u3-01', 'ma-u3', '乘法引入', '2＋2＋2＋2 可以写成哪一个乘法算式？', ['4×2＝8', '2×2＝4', '4＋2＝6'], 0, '4 个 2 相加，可以写成 4×2，得 8。'),
+  makeChoice('ma-u3-02', 'ma-u3', '5的乘法', '5×4 的得数是多少？', ['20', '9', '25'], 0, '5 的乘法口诀：四五二十。'),
+  makeChoice('ma-u3-03', 'ma-u3', '2、4、8的乘法', '2×4 的得数是多少？', ['8', '6', '12'], 0, '二四得八。'),
+  makeChoice('ma-u3-04', 'ma-u3', '2、4、8的乘法', '4×8 的得数是多少？', ['32', '24', '12'], 0, '四八三十二。'),
+  makeChoice('ma-u3-05', 'ma-u3', '7的乘法', '7×5 的得数是多少？', ['35', '12', '30'], 0, '五七三十五。'),
+  makeChoice('ma-u3-06', 'ma-u3', '2、4、8的乘法', '8×2 的得数是多少？', ['16', '10', '18'], 0, '二八十六。'),
+  makeChoice('ma-u3-07', 'ma-u3', '乘法引入', '4 个 7 相加，正确的乘法算式是？', ['4×7＝28', '4＋7＝11', '7×7＝49'], 0, '4 个 7 相加写成 4×7，得 28。'),
+  makeChoice('ma-u3-08', 'ma-u3', '5的乘法', '5×3 表示几个几相加？', ['3 个 5', '5 个 3', '5 个 5'], 0, '5×3 表示 3 个 5 相加，结果是 15。'),
+  makeChoice('ma-u3-09', 'ma-u3', '2、4、8的乘法', '2×8 的得数是多少？', ['16', '10', '18'], 0, '二八十六。'),
+  makeChoice('ma-u3-10', 'ma-u3', '5的乘法', '（　）×5＝25，括号里应填几？', ['5', '4', '6'], 0, '五五二十五，所以括号里填 5。'),
+
+  // 英语第一至第三单元：当前公开可核对范围为单元标题词义练习
+  makeChoice('en-u1-01', 'en-u1', 'Unit 1 · My morning', 'morning 的意思是？', ['早晨', '房间', '路上'], 0, 'morning 是“早晨”。本套题严格只使用已核对的单元标题词。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u1-02', 'en-u1', 'Unit 1 · My morning', 'my 的意思是？', ['我的', '你的', '他们的'], 0, 'my 是“我的”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u1-03', 'en-u1', 'Unit 1 · My morning', '“My morning” 的意思是？', ['我的早晨', '我的房间', '在路上'], 0, 'My morning 可理解为“我的早晨”。', { titleOnly: true, topic: '标题短语' }),
+  makeChoice('en-u1-04', 'en-u1', 'Unit 1 · My morning', '“早晨”对应哪个英文词？', ['morning', 'room', 'way'], 0, '“早晨”对应 morning。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u1-05', 'en-u1', 'Unit 1 · My morning', '下面哪个短语含有 morning？', ['My morning', 'My room', 'On the way'], 0, 'Unit 1 的标题是 My morning。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u1-06', 'en-u1', 'Unit 1 · My morning', '下面哪个词表示“我的”？', ['my', 'morning', 'room'], 0, 'my 表示“我的”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u1-07', 'en-u1', 'Unit 1 · My morning', 'Unit 1 的标题中，表示时间段的词是？', ['morning', 'my', 'room'], 0, 'morning 表示早晨，是时间词。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u1-08', 'en-u1', 'Unit 1 · My morning', '哪一个是 Unit 1 的正确标题？', ['My morning', 'My room', 'In the sea'], 0, 'Unit 1 的公开目录标题是 My morning。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u1-09', 'en-u1', 'Unit 1 · My morning', 'My 后面接的是哪个标题词？', ['morning', 'room', 'way'], 0, '标题组合是 My morning。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u1-10', 'en-u1', 'Unit 1 · My morning', '下面哪一项不是 Unit 1 标题中的词？', ['room', 'my', 'morning'], 0, 'room 属于 Unit 2 My room，不在 Unit 1 标题中。', { titleOnly: true, topic: '标题辨认' }),
+
+  makeChoice('en-u2-01', 'en-u2', 'Unit 2 · My room', 'room 的意思是？', ['房间', '早晨', '水果'], 0, 'room 是“房间”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u2-02', 'en-u2', 'Unit 2 · My room', 'my 的意思是？', ['我的', '我们的', '他的'], 0, 'my 是“我的”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u2-03', 'en-u2', 'Unit 2 · My room', '“My room” 的意思是？', ['我的房间', '我的早晨', '在路上'], 0, 'My room 可理解为“我的房间”。', { titleOnly: true, topic: '标题短语' }),
+  makeChoice('en-u2-04', 'en-u2', 'Unit 2 · My room', '“房间”对应哪个英文词？', ['room', 'morning', 'way'], 0, '“房间”对应 room。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u2-05', 'en-u2', 'Unit 2 · My room', '下面哪个短语含有 room？', ['My room', 'My morning', 'On the way'], 0, 'Unit 2 的标题是 My room。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u2-06', 'en-u2', 'Unit 2 · My room', '下面哪个词表示“我的”？', ['my', 'room', 'on'], 0, 'my 表示“我的”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u2-07', 'en-u2', 'Unit 2 · My room', 'Unit 2 的标题中，表示房间的词是？', ['room', 'my', 'morning'], 0, 'room 表示“房间”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u2-08', 'en-u2', 'Unit 2 · My room', '哪一个是 Unit 2 的正确标题？', ['My room', 'My morning', 'Yummy fruit'], 0, 'Unit 2 的公开目录标题是 My room。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u2-09', 'en-u2', 'Unit 2 · My room', 'My 后面接的是哪个标题词？', ['room', 'morning', 'way'], 0, '标题组合是 My room。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u2-10', 'en-u2', 'Unit 2 · My room', '下面哪一项不是 Unit 2 标题中的词？', ['morning', 'my', 'room'], 0, 'morning 属于 Unit 1 My morning，不在 Unit 2 标题中。', { titleOnly: true, topic: '标题辨认' }),
+
+  makeChoice('en-u3-01', 'en-u3', 'Unit 3 · On the way', '“On the way” 的意思是？', ['在路上', '在房间里', '在海里'], 0, 'on the way 是“在路上”。', { titleOnly: true, topic: '标题短语' }),
+  makeChoice('en-u3-02', 'en-u3', 'Unit 3 · On the way', '“在路上”对应哪个英文短语？', ['On the way', 'My room', 'My morning'], 0, '“在路上”对应 On the way。', { titleOnly: true, topic: '标题短语' }),
+  makeChoice('en-u3-03', 'en-u3', 'Unit 3 · On the way', 'way 在标题短语中和什么有关？', ['路、道路', '房间', '早晨'], 0, 'way 在 on the way 中表示路、道路。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u3-04', 'en-u3', 'Unit 3 · On the way', 'Unit 3 的标题开头是哪一个词？', ['On', 'My', 'In'], 0, 'Unit 3 标题是 On the way。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u3-05', 'en-u3', 'Unit 3 · On the way', 'Unit 3 的标题一共有几个英文词？', ['3 个', '2 个', '4 个'], 0, 'On、the、way 一共 3 个词。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u3-06', 'en-u3', 'Unit 3 · On the way', '下面哪个是 Unit 3 的正确标题？', ['On the way', 'My room', 'In the sky'], 0, 'Unit 3 的公开目录标题是 On the way。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u3-07', 'en-u3', 'Unit 3 · On the way', '下面哪一个词不在 On the way 中？', ['room', 'on', 'way'], 0, 'room 属于 Unit 2 的标题 My room。', { titleOnly: true, topic: '标题辨认' }),
+  makeChoice('en-u3-08', 'en-u3', 'Unit 3 · On the way', '“路”在标题中对应哪个词？', ['way', 'my', 'morning'], 0, 'way 可以表示“路”。', { titleOnly: true, topic: '标题词义' }),
+  makeChoice('en-u3-09', 'en-u3', 'Unit 3 · On the way', '哪一个标题和“在路上”意思相同？', ['On the way', 'My morning', 'My room'], 0, 'On the way 的意思是“在路上”。', { titleOnly: true, topic: '标题短语' }),
+  makeChoice('en-u3-10', 'en-u3', 'Unit 3 · On the way', 'On the way 属于哪一个单元？', ['Unit 3', 'Unit 1', 'Unit 2'], 0, '公开目录中 On the way 是 Unit 3。', { titleOnly: true, topic: '标题辨认' })
+];
+
 const QUESTION_BY_ID = new Map(DAILY_QUESTIONS.map((question) => [question.id, question]));
-const STORAGE_KEY = 'little-practice-station-v3';
+const STORAGE_KEY = 'little-practice-station-v4';
 
 const todayKey = () => {
   const date = new Date();
@@ -457,23 +284,44 @@ function getCurrentQuestion() {
   return questions[currentIndex];
 }
 
-function completedCount(filter = 'all') {
-  return getQuestions(filter).filter((question) => state.answers[question.id]).length;
+function activeUnits(subject = null) {
+  const subjects = subject ? [subject] : SUBJECT_ORDER;
+  return subjects.flatMap((item) => UNIT_CATALOG[item].filter((unit) => unit.available));
+}
+
+function unitTotalScore(unitId) {
+  return unitQuestions(unitId).reduce((sum, question) => sum + question.points, 0);
+}
+
+function unitEarnedScore(unitId) {
+  return unitQuestions(unitId).reduce((sum, question) => sum + (state.answers[question.id]?.correct ? question.points : 0), 0);
+}
+
+function filterTotalScore(filter = currentFilter) {
+  return getQuestions(filter).reduce((sum, question) => sum + question.points, 0);
+}
+
+function earnedScore(filter = currentFilter) {
+  return getQuestions(filter).reduce((sum, question) => sum + (state.answers[question.id]?.correct ? question.points : 0), 0);
 }
 
 function subjectQuestions(subject) {
   return DAILY_QUESTIONS.filter((question) => question.subject === subject);
 }
 
-function subjectCompleted(subject) {
-  return subjectQuestions(subject).filter((question) => state.answers[question.id]).length;
+function unitAnsweredCount(unitId) {
+  return unitQuestions(unitId).filter((question) => state.answers[question.id]).length;
 }
 
-function answeredCount(filter = 'all') {
+function subjectCompleted(subject) {
+  return activeUnits(subject).filter((unit) => unitQuestions(unit.id).length && unitAnsweredCount(unit.id) === unitQuestions(unit.id).length).length;
+}
+
+function answeredCount(filter = currentFilter) {
   return getQuestions(filter).filter((question) => state.answers[question.id]).length;
 }
 
-function correctCount(filter = 'all') {
+function correctCount(filter = currentFilter) {
   return getQuestions(filter).filter((question) => state.answers[question.id]?.correct).length;
 }
 
@@ -487,7 +335,7 @@ function getUnitMeta(unitId) {
 
 function filterLabel(filter) {
   if (filter === 'starter') return '开学起步';
-  if (filter === 'all') return '全部题目';
+  if (filter === 'all') return '全部已开放单元';
   if (SUBJECTS[filter]) return SUBJECTS[filter].name;
   if (filter.startsWith('unit:')) return getUnitMeta(filter.slice(5))?.title || '当前单元';
   return '当前练习组';
@@ -533,14 +381,15 @@ function answerText(question) {
 }
 
 function subjectProgressMarkup(subject) {
-  const total = subjectQuestions(subject).length;
+  const units = activeUnits(subject);
+  const total = units.length;
   const done = subjectCompleted(subject);
   const percent = total ? Math.round((done / total) * 100) : 0;
   const meta = SUBJECTS[subject];
   return `<div class="mini-subject">
     <span class="mini-subject-icon ${subject}">${meta.short}</span>
     <div class="mini-subject-body">
-      <div class="mini-subject-name"><span>${meta.name}</span><em>${done} / ${total}</em></div>
+      <div class="mini-subject-name"><span>${meta.name}</span><em>${done} / ${total}单元</em></div>
       <div class="mini-progress"><span class="${meta.progressClass}" style="width:${percent}%"></span></div>
     </div>
   </div>`;
@@ -559,18 +408,20 @@ function renderUnitGroups() {
     return `<section class="unit-group ${subject}-unit-group" aria-labelledby="${subject}UnitsTitle">
       <div class="unit-group-title">
         <span class="mini-subject-icon ${subject}">${meta.short}</span>
-        <div><h3 id="${subject}UnitsTitle">${escapeHTML(meta.name)}</h3><p>${subject === 'english' ? '学校版本不同，请先核对书封' : '按教材目录逐单元练习'}</p></div>
+        <div><h3 id="${subject}UnitsTitle">${escapeHTML(meta.name)}</h3><p>${subject === 'english' ? '沪教版五四制新教材 · 正文仍需按课本逐单元核对' : '按教材目录逐单元练习'}</p></div>
       </div>
       <div class="unit-list">${units.map((unit, index) => {
         const questions = unitQuestions(unit.id);
-        const done = questions.filter((question) => state.answers[question.id]).length;
-        const total = questions.length;
-        const isPriority = STARTER_UNIT_IDS.includes(unit.id);
-        const status = done === total && total ? '已完成' : `${done} / ${total}`;
-        return `<button class="unit-choice${isPriority ? ' priority' : ''}" data-unit-start="${escapeHTML(unit.id)}" type="button" aria-label="练习${escapeHTML(unit.title)}">
+        const isAvailable = unit.available && questions.length > 0;
+        const isPriority = isAvailable && STARTER_UNIT_IDS.includes(unit.id);
+        const total = isAvailable ? unitTotalScore(unit.id) : 0;
+        const earned = isAvailable ? unitEarnedScore(unit.id) : 0;
+        const answered = isAvailable ? unitAnsweredCount(unit.id) : 0;
+        const status = !isAvailable ? '后续制作' : answered === questions.length ? `已完成 · ${earned} / ${total}分` : `${earned} / ${total}分`;
+        return `<button class="unit-choice${isPriority ? ' priority' : ''}${isAvailable ? '' : ' locked'}" ${isAvailable ? `data-unit-start="${escapeHTML(unit.id)}"` : ''} type="button" aria-label="${isAvailable ? `练习${escapeHTML(unit.title)}` : `${escapeHTML(unit.title)}，后续制作`}" ${isAvailable ? '' : 'disabled'}>
           <span class="unit-index">${String(index + 1).padStart(2, '0')}</span>
           <span class="unit-copy"><strong>${escapeHTML(unit.title)}</strong><small>${escapeHTML(unit.lessons)}</small></span>
-          <span class="unit-status">${isPriority ? '<em>开学优先</em>' : escapeHTML(status)}<b aria-hidden="true">→</b></span>
+          <span class="unit-status">${isPriority ? `<em>开学优先</em><span>${escapeHTML(status)}</span>` : escapeHTML(status)}<b aria-hidden="true">${isAvailable ? '→' : '·'}</b></span>
         </button>`;
       }).join('')}</div>
     </section>`;
@@ -578,9 +429,8 @@ function renderUnitGroups() {
 }
 
 function updateDashboard() {
-  const scopeQuestions = getQuestions(currentFilter);
-  const total = scopeQuestions.length;
-  const completed = scopeQuestions.filter((question) => state.answers[question.id]).length;
+  const total = filterTotalScore(currentFilter);
+  const completed = earnedScore(currentFilter);
   const answered = answeredCount(currentFilter);
   const accuracy = answered ? `${Math.round((correctCount(currentFilter) / answered) * 100)}%` : '—';
   const progress = total ? Math.round((completed / total) * 100) : 0;
@@ -589,21 +439,21 @@ function updateDashboard() {
   document.querySelector('#totalQuestionCount').textContent = total;
   document.querySelector('#streakStat').textContent = getStreak();
   document.querySelector('#accuracyStat').textContent = accuracy;
-  document.querySelector('#taskProgress').textContent = `${filterLabel(currentFilter)} · ${completed} / ${total} 已完成`;
+  document.querySelector('#taskProgress').textContent = `${filterLabel(currentFilter)} · ${completed} / ${total} 分`;
   document.querySelector('#mistakeCount').textContent = state.mistakes.length;
   document.querySelector('#mistakeBigCount').textContent = state.mistakes.length;
   document.querySelector('#weekProgressBar').style.width = `${progress}%`;
   document.querySelector('#weekProgressText').textContent = `${progress}%`;
   document.querySelector('#miniSubjectList').innerHTML = SUBJECT_ORDER.map(subjectProgressMarkup).join('');
 
-  document.querySelector('#starterQuestionCount').textContent = `${getQuestions('starter').length} 题`;
-  document.querySelector('#allQuestionCount').textContent = `${DAILY_QUESTIONS.length} 题`;
+  document.querySelector('#starterQuestionCount').textContent = `${STARTER_UNIT_IDS.length} 个单元`;
+  document.querySelector('#allQuestionCount').textContent = `${activeUnits().length} 个单元`;
   SUBJECT_ORDER.forEach((subject) => {
-    const subjectTotal = subjectQuestions(subject).length;
+    const unitTotal = activeUnits(subject).length;
     const status = document.querySelector(`#${subject}CardStatus`);
     const count = document.querySelector(`#${subject}QuestionCount`);
-    if (status) status.textContent = `${subjectCompleted(subject)} / ${subjectTotal}`;
-    if (count) count.textContent = `${subjectTotal} 题`;
+    if (status) status.textContent = `${subjectCompleted(subject)} / ${unitTotal} 单元`;
+    if (count) count.textContent = `${unitTotal} 个单元`;
   });
   renderUnitGroups();
 }
@@ -617,7 +467,7 @@ function renderQuestion() {
   if (completionFilter === currentFilter) {
     questionPanel.innerHTML = `<div class="completed-banner">
       <div class="completed-check" aria-hidden="true">✓</div>
-      <div><h3>这一组完成啦！</h3><p>你已经认真走完这一小段，休息一下，再去挑战下一组吧。</p><button class="primary-button" data-action="restart" type="button">再看一遍 <span>↻</span></button></div>
+      <div><h3>这一单元完成啦！</h3><p>本组得分 <strong>${earnedScore(currentFilter)} / ${filterTotalScore(currentFilter)} 分</strong>。休息一下，再去挑战下一个单元吧。</p><button class="primary-button" data-action="restart" type="button">再看一遍 <span>↻</span></button></div>
     </div>`;
     return;
   }
@@ -655,9 +505,9 @@ function renderQuestion() {
   let feedback = '';
   if (isAnswered) {
     if (result.correct) {
-      feedback = `<div class="answer-feedback"><span class="feedback-icon">✓</span><span><strong>答对啦！</strong> ${escapeHTML(question.explanation)}</span></div>`;
+      feedback = `<div class="answer-feedback"><span class="feedback-icon">✓</span><span><strong>答对啦！本题得 ${question.points} 分。</strong> ${escapeHTML(question.explanation)}</span></div>`;
     } else {
-      feedback = `<div class="answer-feedback wrong"><span class="feedback-icon">!</span><span><strong>再记一记：</strong>正确答案是“${escapeHTML(answerText(question))}”。${escapeHTML(question.explanation)}</span></div>`;
+      feedback = `<div class="answer-feedback wrong"><span class="feedback-icon">!</span><span><strong>再记一记：本题 0 分。</strong>正确答案是“${escapeHTML(answerText(question))}”。${escapeHTML(question.explanation)}</span></div>`;
     }
   }
 
@@ -670,7 +520,7 @@ function renderQuestion() {
 
   questionPanel.innerHTML = `<div class="question-top">
       <span class="question-label ${meta.labelClass}"><span class="label-icon">${escapeHTML(question.icon)}</span>${escapeHTML(meta.name)} · ${escapeHTML(question.unit)}</span>
-      <span class="question-number">第 ${numberText} 题</span>
+      <span class="question-number">第 ${numberText} 题 · ${question.points} 分</span>
     </div>
     <div class="question-lesson">${escapeHTML(question.lesson)} · ${escapeHTML(question.topic)}</div>
     <h3>${escapeHTML(question.prompt)}</h3>
@@ -827,23 +677,26 @@ function showToast(message) {
 
 function updateReport() {
   const groupLabel = filterLabel(currentFilter);
-  const total = getQuestions(currentFilter).length;
-  const completed = completedCount(currentFilter);
+  const total = filterTotalScore(currentFilter);
+  const completed = earnedScore(currentFilter);
+  const answered = answeredCount(currentFilter);
+  const questionTotal = getQuestions(currentFilter).length;
+  const finished = questionTotal > 0 && answered === questionTotal;
   const percent = total ? Math.round((completed / total) * 100) : 0;
   const reportPercent = document.querySelector('#reportPercent');
   const ring = document.querySelector('#reportRing');
   reportPercent.textContent = `${percent}%`;
   ring.style.borderRightColor = percent > 50 ? 'var(--teal-dark)' : '#bce2d5';
   ring.style.borderTopColor = percent > 25 ? 'var(--teal-dark)' : '#bce2d5';
-  document.querySelector('#reportSummaryTitle').textContent = completed === 0 ? '还没有开始' : completed === total ? `${groupLabel}完成！` : `已经完成 ${completed} 道题`;
-  document.querySelector('#reportSummaryText').textContent = completed === 0 ? '陪孩子先完成当前单元，给今天一个轻松的开始吧。' : completed === total ? '这一小组留下了认真练习的脚印，今天表现很棒！' : '保持这个节奏，做完以后记得看一眼错题解析。';
+  document.querySelector('#reportSummaryTitle').textContent = answered === 0 ? '还没有开始' : finished ? `${groupLabel}完成！` : `已经得到 ${completed} 分`;
+  document.querySelector('#reportSummaryText').textContent = answered === 0 ? '陪孩子先完成当前单元，给今天一个轻松的开始吧。' : finished ? `这一小组得分 ${completed} / ${total} 分。看一眼错题解析，再决定要不要重做。` : `当前得分进度 ${percent}%，做完以后记得看一眼错题解析。`;
   document.querySelector('#reportSubjects').innerHTML = SUBJECT_ORDER.map((subject) => {
-    const done = subjectCompleted(subject);
-    const subjectTotal = subjectQuestions(subject).length;
+    const done = activeUnits(subject).reduce((sum, unit) => sum + unitEarnedScore(unit.id), 0);
+    const subjectTotal = activeUnits(subject).reduce((sum, unit) => sum + unitTotalScore(unit.id), 0);
     const percentSubject = subjectTotal ? Math.round((done / subjectTotal) * 100) : 0;
     const meta = SUBJECTS[subject];
     const color = subject === 'chinese' ? 'var(--coral)' : subject === 'math' ? 'var(--yellow)' : 'var(--lilac)';
-    return `<div class="report-subject-row"><span>${meta.name}</span><div class="report-bar"><span style="width:${percentSubject}%;background:${color}"></span></div><strong>${done}/${subjectTotal}</strong></div>`;
+    return `<div class="report-subject-row"><span>${meta.name}</span><div class="report-bar"><span style="width:${percentSubject}%;background:${color}"></span></div><strong>${done}/${subjectTotal}分</strong></div>`;
   }).join('');
 }
 

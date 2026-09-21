@@ -407,3 +407,28 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgba(244, 200, 93
   .unit-copy strong { font-size: 9px; }
   .unit-copy small { font-size: 7px; }
 }
+
+/* Scores and unopened units */
+.unit-choice.locked {
+  cursor: not-allowed;
+  color: #aeb5b2;
+  border-color: #eeeae5;
+  background: #f7f6f2;
+  opacity: .78;
+}
+.unit-choice.locked:hover {
+  border-color: #eeeae5;
+  background: #f7f6f2;
+  transform: none;
+}
+.unit-choice.locked .unit-index {
+  color: #b2b8b5;
+  background: #ecebe5;
+}
+.unit-choice.locked .unit-copy strong,
+.unit-choice.locked .unit-copy small,
+.unit-choice.locked .unit-status {
+  color: #aeb5b2;
+}
+.unit-choice.locked .unit-status b { color: #c8ccc8; }
+.unit-status { font-size: 8px; }
