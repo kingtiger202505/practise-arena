@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f7f4ed" />
-    <meta name="description" content="给上海二年级小朋友的上学期语文、数学、英语每日练习。" />
-    <title>小小练习站 · 沪上二年级</title>
+    <meta name="description" content="给上海二年级小朋友的 2026—2027 学年第一学期语文、数学、英语教材单元练习。" />
+    <title>小小练习站 · 上海二年级教材练习</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -79,10 +79,10 @@
               <div class="hero-copy">
                 <div class="eyebrow"><span class="eyebrow-dot"></span>2026—2027 学年 · 第一学期</div>
                 <h1 id="homeTitle">今天的练习，<br /><em>轻松做一点</em></h1>
-                <p>语文、数学、英语各来几题，<br class="desktop-break" />把会的变得更熟练。</p>
+                <p>按已核对的教材单元来练，<br class="desktop-break" />把今天学过的变得更熟练。</p>
                 <div class="hero-actions">
                   <button class="primary-button" id="startToday" type="button">开始今日练习 <span aria-hidden="true">→</span></button>
-                  <span class="time-note"><span class="tiny-clock" aria-hidden="true">◷</span> 约 15 分钟</span>
+                  <span class="time-note"><span class="tiny-clock" aria-hidden="true">◷</span> 约 20 分钟</span>
                 </div>
               </div>
               <div class="hero-illustration" aria-hidden="true">
@@ -101,10 +101,19 @@
               </div>
             </div>
 
+            <div class="curriculum-notice" role="note" aria-label="教材版本核对提示">
+              <div class="notice-icon" aria-hidden="true">!</div>
+              <div class="notice-copy">
+                <strong>先看一眼教材版本</strong>
+                <p>本页按 2026—2027 学年第一学期的已核对目录整理：语文为统编版（2024），数学为沪少儿《数学（试用本）》；上海英语由学校选用版本，英语题目前只使用“沪教版（五四制·2024）新教材”公开目录中已核对的单元标题和标题词义。请家长按孩子的书封、目录核对，英语暂不能代表牛津上海版或新世纪版。</p>
+                <div class="notice-links"><a href="https://edu.sh.gov.cn/xxgk2_zdgz_jcjy_04/20240801/bb522c1b161b441281dba8bfe9296b36.html" target="_blank" rel="noreferrer">上海市教委用书目录</a><span>·</span><a href="https://www.51jiaoxi.com/yw/tb_c4069505/" target="_blank" rel="noreferrer">语文目录核对页</a><span>·</span><a href="https://www.zxxk.com/docpack/3530241.html" target="_blank" rel="noreferrer">数学单元目录</a><span>·</span><a href="https://www.zxxk.com/docpack/3513557.html" target="_blank" rel="noreferrer">英语公开备课目录</a></div>
+              </div>
+            </div>
+
             <div class="stat-row" aria-label="学习概览">
               <div class="stat-item">
                 <div class="stat-icon coral-icon" aria-hidden="true">✓</div>
-                <div><span>今日完成</span><strong><b id="completedStat">0</b> / 9 题</strong></div>
+                <div><span>今日完成</span><strong><b id="completedStat">0</b> / <span id="totalQuestionCount" class="stat-total">25</span> 题</strong></div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
@@ -124,14 +133,14 @@
                 <span class="section-kicker">小小任务单</span>
                 <h2>今日练习</h2>
               </div>
-              <span class="task-progress" id="taskProgress">0 / 9 已完成</span>
+              <span class="task-progress" id="taskProgress">0 / 25 已完成</span>
             </div>
 
             <div class="subject-tabs" role="tablist" aria-label="选择练习学科">
-              <button class="subject-tab all-tab active" data-filter="all" role="tab" aria-selected="true" type="button"><span class="tab-icon">✦</span> 全部 <small>9 题</small></button>
-              <button class="subject-tab chinese-tab" data-filter="chinese" role="tab" aria-selected="false" type="button"><span class="tab-icon">语</span> 语文 <small>3 题</small></button>
-              <button class="subject-tab math-tab" data-filter="math" role="tab" aria-selected="false" type="button"><span class="tab-icon">＋</span> 数学 <small>3 题</small></button>
-              <button class="subject-tab english-tab" data-filter="english" role="tab" aria-selected="false" type="button"><span class="tab-icon">A</span> 英语 <small>3 题</small></button>
+              <button class="subject-tab all-tab active" data-filter="all" role="tab" aria-selected="true" type="button"><span class="tab-icon">✦</span> 全部 <small id="allQuestionCount">25 题</small></button>
+              <button class="subject-tab chinese-tab" data-filter="chinese" role="tab" aria-selected="false" type="button"><span class="tab-icon">语</span> 语文 <small id="chineseQuestionCount">8 题</small></button>
+              <button class="subject-tab math-tab" data-filter="math" role="tab" aria-selected="false" type="button"><span class="tab-icon">＋</span> 数学 <small id="mathQuestionCount">7 题</small></button>
+              <button class="subject-tab english-tab" data-filter="english" role="tab" aria-selected="false" type="button"><span class="tab-icon">A</span> 英语 <small id="englishQuestionCount">10 题</small></button>
             </div>
 
             <div class="practice-grid">
@@ -163,31 +172,31 @@
               <div>
                 <div class="eyebrow"><span class="eyebrow-dot"></span>按自己的节奏来</div>
                 <h1 id="subjectsTitle">想练哪一科？</h1>
-                <p>每一组都从基础开始，做对了就给自己一个小勾勾。</p>
+                <p>每一组都对应一个已核对的教材单元；做前先看看孩子手里的版本。</p>
               </div>
               <div class="page-sticker" aria-hidden="true"><span>今天</span><strong>慢慢来<br />也很棒</strong></div>
             </div>
             <div class="subject-cards">
               <article class="subject-card large-chinese">
-                <div class="subject-card-top"><span class="large-subject-icon">语</span><span class="subject-status" id="chineseCardStatus">0 / 3</span></div>
-                <h2>语文</h2><p>字词积累 · 句子练习 · 阅读小站</p>
+                <div class="subject-card-top"><span class="large-subject-icon">语</span><span class="subject-status" id="chineseCardStatus">0 / 8</span></div>
+                <h2>语文</h2><p>统编版（2024）八个阅读/识字单元</p>
                 <div class="card-decoration chinese-decoration" aria-hidden="true"><span>字</span><span>词</span><span>读</span></div>
                 <button class="card-button" data-subject-start="chinese" type="button">开始练习 <span>→</span></button>
               </article>
               <article class="subject-card large-math">
-                <div class="subject-card-top"><span class="large-subject-icon">＋</span><span class="subject-status" id="mathCardStatus">0 / 3</span></div>
-                <h2>数学</h2><p>口算小达人 · 图形与应用题</p>
+                <div class="subject-card-top"><span class="large-subject-icon">＋</span><span class="subject-status" id="mathCardStatus">0 / 7</span></div>
+                <h2>数学</h2><p>沪少儿试用本七个单元</p>
                 <div class="card-decoration math-decoration" aria-hidden="true"><span>＋</span><span>−</span><span>×</span></div>
                 <button class="card-button" data-subject-start="math" type="button">开始练习 <span>→</span></button>
               </article>
               <article class="subject-card large-english">
-                <div class="subject-card-top"><span class="large-subject-icon">A</span><span class="subject-status" id="englishCardStatus">0 / 3</span></div>
-                <h2>英语</h2><p>单词认读 · 日常问候 · 简单句型</p>
+                <div class="subject-card-top"><span class="large-subject-icon">A</span><span class="subject-status" id="englishCardStatus">0 / 10</span></div>
+                <h2>英语</h2><p>校选版本提示 · 先核对单元标题</p>
                 <div class="card-decoration english-decoration" aria-hidden="true"><span>Hi!</span><span>ABC</span></div>
                 <button class="card-button" data-subject-start="english" type="button">开始练习 <span>→</span></button>
               </article>
             </div>
-            <div class="study-tip"><span class="tip-star" aria-hidden="true">✦</span><div><strong>给小朋友的建议</strong><p>每天选一科认真做完，比一次做很多、却没有检查更有效哦。</p></div><span class="tip-pencil" aria-hidden="true">✎</span></div>
+            <div class="study-tip"><span class="tip-star" aria-hidden="true">✦</span><div><strong>给小朋友的建议</strong><p>每天选一科认真做完，比一次做很多、却没有检查更有效哦。英语如果和学校目录不同，请先暂停并核对书封。</p></div><span class="tip-pencil" aria-hidden="true">✎</span></div>
           </section>
 
           <section class="view" id="mistakesView" aria-labelledby="mistakesTitle" hidden>
