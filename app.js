@@ -1,7 +1,7 @@
 /*
  * Unit practice packs. The first three units of each subject are the active
- * beginning-of-term scope requested by the parent. Every active unit has ten
- * 10-point items, for a 100-point unit paper.
+ * beginning-of-term scope requested by the parent. Every active unit has twenty
+ * 5-point items, for a 100-point unit paper.
  *
  * Chinese questions use checked 2024 textbook texts and stories. Mathematics
  * questions use the checked unit lesson topics. The English school version has
@@ -64,7 +64,8 @@ function makeChoice(id, unitId, lesson, prompt, options, answer, explanation, ex
     lesson,
     topic: extra.topic || '单元练习',
     icon: SUBJECTS[info.subject].short,
-    points: 10,
+    points: 5,
+    typeLabel: extra.typeLabel || '选择题',
     prompt,
     options,
     answer,
@@ -83,12 +84,43 @@ function makeInput(id, unitId, lesson, prompt, answer, explanation, extra = {}) 
     lesson,
     topic: extra.topic || '单元练习',
     icon: SUBJECTS[info.subject].short,
-    points: 10,
+    points: 5,
+    typeLabel: extra.typeLabel || '填空题',
     kind: 'input',
     prompt,
     answer: String(answer),
     answerText: String(answer),
     placeholder: '写出答案',
+    explanation,
+    ...extra
+  };
+}
+
+function makeTextInput(id, unitId, lesson, prompt, answer, explanation, extra = {}) {
+  return makeInput(id, unitId, lesson, prompt, answer, explanation, { inputMode: 'text', ...extra });
+}
+
+function makeJudge(id, unitId, lesson, prompt, isTrue, explanation, extra = {}) {
+  return makeChoice(id, unitId, lesson, prompt, ['正确', '错误'], isTrue ? 0 : 1, explanation, { kind: 'judge', typeLabel: '判断题', ...extra });
+}
+
+function makeOrder(id, unitId, lesson, prompt, items, answer, explanation, extra = {}) {
+  const info = UNIT_INFO[unitId];
+  return {
+    id,
+    subject: info.subject,
+    unitId,
+    unit: info.title,
+    lesson,
+    topic: extra.topic || '单元练习',
+    icon: SUBJECTS[info.subject].short,
+    points: 5,
+    typeLabel: extra.typeLabel || '排序题',
+    kind: 'order',
+    prompt,
+    items,
+    answer,
+    answerText: answer.map((index) => items[index]).join(' → '),
     explanation,
     ...extra
   };
@@ -202,8 +234,134 @@ const DAILY_QUESTIONS = [
   makeChoice('en-u3-10', 'en-u3', 'Unit 3 · On the way', 'On the way 属于哪一个单元？', ['Unit 3', 'Unit 1', 'Unit 2'], 0, '公开目录中 On the way 是 Unit 3。', { titleOnly: true, topic: '标题辨认' })
 ];
 
+
+
+// 每个开放单元补充 10 道不同题型：填空、判断和排序与选择题混合。
+const EXTRA_QUESTIONS = [
+  // 语文第一单元
+  makeTextInput('ch-u1-11', 'ch-u1', '《小蝌蚪找妈妈》', '小蝌蚪最后长成了什么？请写出答案。', '小青蛙', '小蝌蚪经过成长变化，最后长成了小青蛙。', { topic: '课文填空' }),
+  makeJudge('ch-u1-12', 'ch-u1', '《小蝌蚪找妈妈》', '小蝌蚪先长出了两条前腿。', false, '课文写的是先长出两条后腿，后来才长出两条前腿。', { topic: '课文判断' }),
+  makeOrder('ch-u1-13', 'ch-u1', '《小蝌蚪找妈妈》', '请按小蝌蚪成长的先后顺序排列。', ['长出两条后腿', '长出两条前腿', '尾巴变短', '长成青蛙'], [0, 1, 2, 3], '小蝌蚪先长后腿，再长前腿，尾巴变短，最后长成青蛙。', { topic: '成长顺序' }),
+  makeJudge('ch-u1-14', 'ch-u1', '《我是什么》', '《我是什么》中的“我”指的是水。', true, '水会变成云、雨、冰雹和雪，所以“我”指水。', { topic: '课文判断' }),
+  makeTextInput('ch-u1-15', 'ch-u1', '《我是什么》', '水变成的小花朵是____。', '雪', '课文把雪比作从空中飘下来的小花朵。', { topic: '课文填空' }),
+  makeJudge('ch-u1-16', 'ch-u1', '《我是什么》', '水有时候很温和，有时候很暴躁。', true, '课文既写水温和的一面，也写水暴躁时可能带来的灾害。', { topic: '课文判断' }),
+  makeOrder('ch-u1-17', 'ch-u1', '《植物妈妈有办法》', '请把这句话按正确顺序排列。', ['植物妈妈有办法', '蒲公英妈妈', '靠风传播种子'], [0, 1, 2], '课文先总说植物妈妈有办法，再写蒲公英妈妈借助风传播种子。', { topic: '句子排序' }),
+  makeTextInput('ch-u1-18', 'ch-u1', '《植物妈妈有办法》', '蒲公英的种子像什么？请写出答案。', '降落伞', '蒲公英的种子像降落伞，靠风传播。', { topic: '课文填空' }),
+  makeJudge('ch-u1-19', 'ch-u1', '《植物妈妈有办法》', '苍耳是靠太阳把种子传播出去的。', false, '苍耳的种子带刺，容易挂在动物的皮毛上。', { topic: '课文判断' }),
+  makeTextInput('ch-u1-20', 'ch-u1', '《植物妈妈有办法》', '豌豆豆荚晒在太阳底下会怎样？请写出答案。', '炸开', '豌豆豆荚晒在太阳底下会炸开，种子就蹦着离开。', { topic: '课文填空' }),
+
+  // 语文第二单元
+  makeTextInput('ch-u2-11', 'ch-u2', '《场景歌》', '“一____鱼塘”中应该填哪个量词？', '方', '课文中的搭配是“一方鱼塘”。', { topic: '量词填空' }),
+  makeJudge('ch-u2-12', 'ch-u2', '《场景歌》', '“一艘军舰”中的量词使用正确。', true, '军舰可以用量词“艘”。', { topic: '量词判断' }),
+  makeOrder('ch-u2-13', 'ch-u2', '《场景歌》', '请按课文海边场景的先后顺序排列。', ['一只海鸥', '一条帆船', '一艘军舰', '一处港湾'], [0, 1, 2, 3], '《场景歌》先写海鸥、帆船，再写军舰和港湾。', { topic: '课文排序' }),
+  makeTextInput('ch-u2-14', 'ch-u2', '《树之歌》', '“木棉喜暖在____”中应该填什么？', '南方', '木棉喜欢温暖的南方。', { topic: '课文填空' }),
+  makeJudge('ch-u2-15', 'ch-u2', '《树之歌》', '梧桐树的叶子像手掌。', true, '课文中有“梧桐树叶像手掌”的句子。', { topic: '课文判断' }),
+  makeTextInput('ch-u2-16', 'ch-u2', '《树之歌》', '哪种树秋天叶儿红？请写出树名。', '枫树', '课文写“枫树秋天叶儿红”。', { topic: '课文填空' }),
+  makeJudge('ch-u2-17', 'ch-u2', '《树之歌》', '松柏四季都是绿色的。', true, '“松柏四季披绿装”说明松柏四季常绿。', { topic: '课文判断' }),
+  makeTextInput('ch-u2-18', 'ch-u2', '《拍手歌》', '“____在竹林嬉戏”中应该填什么动物？', '熊猫', '课文写熊猫在竹林嬉戏。', { topic: '课文填空' }),
+  makeJudge('ch-u2-19', 'ch-u2', '《拍手歌》', '“天空雁群会写字”是说雁群真的拿笔写字。', false, '“写字”是形象地说雁群排成队形飞过天空。', { topic: '课文判断' }),
+  makeTextInput('ch-u2-20', 'ch-u2', '《田家四季歌》', '“夏季里，农事____”中应该填什么？', '忙', '夏季里农事忙，课文用这句话写农民的劳动。', { topic: '课文填空' }),
+
+  // 语文第三单元
+  makeTextInput('ch-u3-11', 'ch-u3', '《彩虹》', '孩子想提着水壶帮爸爸做什么？', '浇田', '孩子想提着水壶把水洒下来帮爸爸浇田。', { topic: '课文填空' }),
+  makeJudge('ch-u3-12', 'ch-u3', '《彩虹》', '课文把雨后的彩虹想象成了一座桥。', true, '孩子把彩虹想象成一座美丽的桥。', { topic: '课文判断' }),
+  makeOrder('ch-u3-13', 'ch-u3', '《彩虹》', '请按孩子在彩虹桥上的三个愿望排列。', ['帮爸爸浇田', '把镜子挂在彩虹上', '坐秋千荡来荡去'], [0, 1, 2], '课文先写帮爸爸，再写帮妈妈，最后写陪哥哥。', { topic: '课文排序' }),
+  makeTextInput('ch-u3-14', 'ch-u3', '《去外婆家》', '去外婆家的路上，孩子遇到了哪种小鸟？', '小山雀', '课文写去外婆家的路上遇到了小山雀。', { topic: '课文填空' }),
+  makeJudge('ch-u3-15', 'ch-u3', '《去外婆家》', '《去外婆家》中提到了杜鹃花。', true, '杜鹃花是课文中写到的花。', { topic: '课文判断' }),
+  makeTextInput('ch-u3-16', 'ch-u3', '《去外婆家》', '课文中的果子有山楂、____和毛栗子。', '柿子', '课文写到山楂、柿子和毛栗子。', { topic: '课文填空' }),
+  makeJudge('ch-u3-17', 'ch-u3', '《数星星的孩子》', '北斗七星排列起来像一把勺子。', true, '课文把北斗七星的形状写成像一把勺子。', { topic: '课文判断' }),
+  makeTextInput('ch-u3-18', 'ch-u3', '《数星星的孩子》', '张衡长大后成了什么家？', '天文学家', '张衡长大后成了著名的天文学家。', { topic: '课文填空' }),
+  makeOrder('ch-u3-19', 'ch-u3', '《数星星的孩子》', '请按张衡成长和观察的内容排列。', ['数星星', '发现北斗七星像勺子', '知道北极星位置好像不动', '长大成为天文学家'], [0, 1, 2, 3], '课文先写小时候数星星和观察，再写张衡长大后的成就。', { topic: '课文排序' }),
+  makeJudge('ch-u3-20', 'ch-u3', '《数星星的孩子》', '北极星的位置每天都在变化。', false, '课文写北极星的位置好像不动。', { topic: '课文判断' }),
+
+  // 数学第一单元
+  makeInput('ma-u1-11', 'ma-u1', '两位数退位减法', '算一算：46 − 19 =', 27, '46－19＝27，个位退位后再计算十位。', { topic: '计算填空' }),
+  makeJudge('ma-u1-12', 'ma-u1', '两位数退位减法', '73 − 28 = 45。', true, '73－28＝45。', { topic: '计算判断' }),
+  makeInput('ma-u1-13', 'ma-u1', '两位数退位减法', '算一算：90 − 47 =', 43, '90－47＝43。', { topic: '计算填空' }),
+  makeJudge('ma-u1-14', 'ma-u1', '两位数减法', '64 − 32 = 22。', false, '64－32＝32，不是22。', { topic: '计算判断' }),
+  makeOrder('ma-u1-15', 'ma-u1', '两位数退位减法', '请按计算 52 − 27 的主要步骤排列。', ['个位2减7不够减', '从十位借1个十', '12－7＝5', '十位退位后5－2＝3', '得35'], [0, 1, 2, 3, 4], '退位减法要先借1个十，再计算个位和十位。', { topic: '计算步骤' }),
+  makeInput('ma-u1-16', 'ma-u1', '两位数减一位数', '算一算：57 − 8 =', 49, '57－8＝49。', { topic: '计算填空' }),
+  makeJudge('ma-u1-17', 'ma-u1', '两位数减整十数', '86 − 40 = 46。', true, '86－40＝46。', { topic: '计算判断' }),
+  makeInput('ma-u1-18', 'ma-u1', '解决问题：比多与少', '42 −（　）＝18，括号里应填几？', 24, '42－18＝24，所以括号里填24。', { topic: '算式填空' }),
+  makeJudge('ma-u1-19', 'ma-u1', '解决问题：比多与少', '求两个数相差多少，通常用加法。', false, '求相差多少通常用减法。', { topic: '方法判断' }),
+  makeInput('ma-u1-20', 'ma-u1', '解决问题：比多与少', '61 本书借走一些后还剩29本，借走了多少本？', 32, '61－29＝32（本）。', { topic: '解决问题' }),
+
+  // 数学第二单元
+  makeInput('ma-u2-11', 'ma-u2', '认识人民币', '1 元等于多少角？请填数。', 10, '1元＝10角。', { topic: '单位换算' }),
+  makeJudge('ma-u2-12', 'ma-u2', '认识人民币', '2 元 3 角等于 23 角。', true, '2元＝20角，20角＋3角＝23角。', { topic: '单位换算判断' }),
+  makeInput('ma-u2-13', 'ma-u2', '认识人民币', '4 元 5 角等于多少角？', 45, '4元＝40角，40角＋5角＝45角。', { topic: '单位换算' }),
+  makeJudge('ma-u2-14', 'ma-u2', '认识人民币', '30 角等于 3 元。', true, '10角是1元，30角就是3元。', { topic: '单位换算判断' }),
+  makeInput('ma-u2-15', 'ma-u2', '一起来购物', '20 元买12元的书，应找回多少元？', 8, '20－12＝8（元）。', { topic: '购物计算' }),
+  makeInput('ma-u2-16', 'ma-u2', '一起来购物', '6 元、3 元和2元的商品合起来要多少元？', 11, '6＋3＋2＝11（元）。', { topic: '购物计算' }),
+  makeJudge('ma-u2-17', 'ma-u2', '一起来购物', '5 元和4元合起来可以买8元的商品，还剩1元。', true, '5＋4＝9（元），买8元商品还剩1元。', { topic: '购物判断' }),
+  makeOrder('ma-u2-18', 'ma-u2', '一起来购物', '请按购物时的合理步骤排列。', ['看清商品价格', '想好要买什么', '付款并核对找零'], [0, 1, 2], '购物时要先看价格，再决定购买，最后付款并核对找零。', { topic: '生活排序' }),
+  makeInput('ma-u2-19', 'ma-u2', '一起来购物', '10 元买7元的橡皮，应找回多少元？', 3, '10－7＝3（元）。', { topic: '购物计算' }),
+  makeJudge('ma-u2-20', 'ma-u2', '一起来购物', '带着5元和3元，正好可以买8元的文具。', true, '5＋3＝8（元），钱正好够。', { topic: '购物判断' }),
+
+  // 数学第三单元
+  makeInput('ma-u3-11', 'ma-u3', '乘法引入', '算一算：3×4 =', 12, '3个4相加是12。', { topic: '乘法填空' }),
+  makeJudge('ma-u3-12', 'ma-u3', '5的乘法', '4×5 = 20。', true, '四五二十。', { topic: '口诀判断' }),
+  makeInput('ma-u3-13', 'ma-u3', '7的乘法', '算一算：7×4 =', 28, '四七二十八。', { topic: '乘法填空' }),
+  makeJudge('ma-u3-14', 'ma-u3', '2、4、8的乘法', '8×2 = 18。', false, '二八十六，8×2＝16。', { topic: '口诀判断' }),
+  makeOrder('ma-u3-15', 'ma-u3', '乘法引入', '请把加法表示改写成乘法的步骤排列。', ['2＋2＋2＋2', '4个2相加', '4×2＝8'], [0, 1, 2], '先看出有4个2，再写成4×2，结果是8。', { topic: '算式排序' }),
+  makeInput('ma-u3-16', 'ma-u3', '5的乘法', '算一算：5×7 =', 35, '五七三十五。', { topic: '乘法填空' }),
+  makeJudge('ma-u3-17', 'ma-u3', '2、4、8的乘法', '2×8 = 16。', true, '二八十六。', { topic: '口诀判断' }),
+  makeInput('ma-u3-18', 'ma-u3', '5的乘法', '（　）×4＝20，括号里应填几？', 5, '五四二十，所以括号里填5。', { topic: '算式填空' }),
+  makeJudge('ma-u3-19', 'ma-u3', '乘法引入', '7×3表示3个7相加。', true, '7×3表示3个7相加，结果是21。', { topic: '意义判断' }),
+  makeInput('ma-u3-20', 'ma-u3', '乘法引入', '4＋4＋4＋4＋4可以写成几×几？', 5, '5个4相加，可以写成5×4。', { topic: '算式填空' }),
+
+  // 英语第一单元：只使用已核对的标题词
+  makeTextInput('en-u1-11', 'en-u1', 'Unit 1 · My morning', '请写出表示“早晨”的英文词。', 'morning', '“早晨”是morning。', { titleOnly: true, topic: '标题词拼写' }),
+  makeJudge('en-u1-12', 'en-u1', 'Unit 1 · My morning', '在“My morning”中，my表示“我的”。', true, 'my表示“我的”。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u1-13', 'en-u1', 'Unit 1 · My morning', '请把标题词按正确顺序排列。', ['My', 'morning'], [0, 1], '正确标题是My morning。', { titleOnly: true, topic: '标题排序' }),
+  makeInput('en-u1-14', 'en-u1', 'Unit 1 · My morning', '“My morning”一共有几个英文词？', 2, 'My morning一共有2个英文词。', { titleOnly: true, topic: '标题辨认' }),
+  makeJudge('en-u1-15', 'en-u1', 'Unit 1 · My morning', 'room在Unit 1标题“My morning”中。', false, 'room属于Unit 2标题“My room”。', { titleOnly: true, topic: '标题判断' }),
+  makeTextInput('en-u1-16', 'en-u1', 'Unit 1 · My morning', '请写出“My morning”中的第一个词。', 'my', '标题的第一个词是my。', { titleOnly: true, topic: '标题填空' }),
+  makeJudge('en-u1-17', 'en-u1', 'Unit 1 · My morning', '“My room”是Unit 1的标题。', false, 'Unit 1的标题是“My morning”。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u1-18', 'en-u1', 'Unit 1 · My morning', '请把打乱的标题词排成正确顺序。', ['morning', 'My'], [1, 0], '正确标题是My morning。', { titleOnly: true, topic: '标题排序' }),
+  makeTextInput('en-u1-19', 'en-u1', 'Unit 1 · My morning', '请写出Unit 1的英文标题。', 'My morning', 'Unit 1的标题是My morning。', { titleOnly: true, topic: '标题填空' }),
+  makeJudge('en-u1-20', 'en-u1', 'Unit 1 · My morning', 'Unit 1标题中包含morning。', true, 'Unit 1的标题是My morning。', { titleOnly: true, topic: '标题判断' }),
+
+  // 英语第二单元：只使用已核对的标题词
+  makeTextInput('en-u2-11', 'en-u2', 'Unit 2 · My room', '请写出表示“房间”的英文词。', 'room', '“房间”是room。', { titleOnly: true, topic: '标题词拼写' }),
+  makeJudge('en-u2-12', 'en-u2', 'Unit 2 · My room', '在“My room”中，my表示“我的”。', true, 'my表示“我的”。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u2-13', 'en-u2', 'Unit 2 · My room', '请把标题词按正确顺序排列。', ['My', 'room'], [0, 1], '正确标题是My room。', { titleOnly: true, topic: '标题排序' }),
+  makeInput('en-u2-14', 'en-u2', 'Unit 2 · My room', '“My room”一共有几个英文词？', 2, 'My room一共有2个英文词。', { titleOnly: true, topic: '标题辨认' }),
+  makeJudge('en-u2-15', 'en-u2', 'Unit 2 · My room', 'morning在Unit 2标题“My room”中。', false, 'morning属于Unit 1标题“My morning”。', { titleOnly: true, topic: '标题判断' }),
+  makeTextInput('en-u2-16', 'en-u2', 'Unit 2 · My room', '请写出“My room”中的第一个词。', 'my', '标题的第一个词是my。', { titleOnly: true, topic: '标题填空' }),
+  makeJudge('en-u2-17', 'en-u2', 'Unit 2 · My room', '“My room”是Unit 2的标题。', true, 'Unit 2的标题是“My room”。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u2-18', 'en-u2', 'Unit 2 · My room', '请把打乱的标题词排成正确顺序。', ['room', 'My'], [1, 0], '正确标题是My room。', { titleOnly: true, topic: '标题排序' }),
+  makeTextInput('en-u2-19', 'en-u2', 'Unit 2 · My room', '请写出Unit 2的英文标题。', 'My room', 'Unit 2的标题是My room。', { titleOnly: true, topic: '标题填空' }),
+  makeJudge('en-u2-20', 'en-u2', 'Unit 2 · My room', 'way在Unit 2标题“My room”中。', false, 'way属于Unit 3标题“On the way”。', { titleOnly: true, topic: '标题判断' }),
+
+  // 英语第三单元：只使用已核对的标题词
+  makeTextInput('en-u3-11', 'en-u3', 'Unit 3 · On the way', '请写出表示“路”的英文词。', 'way', '在标题短语中，way可以表示“路”。', { titleOnly: true, topic: '标题词拼写' }),
+  makeJudge('en-u3-12', 'en-u3', 'Unit 3 · On the way', '“On the way”一共有3个英文词。', true, 'On、the、way一共有3个词。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u3-13', 'en-u3', 'Unit 3 · On the way', '请把标题词按正确顺序排列。', ['On', 'the', 'way'], [0, 1, 2], '正确标题是On the way。', { titleOnly: true, topic: '标题排序' }),
+  makeInput('en-u3-14', 'en-u3', 'Unit 3 · On the way', '“On the way”一共有几个英文词？', 3, 'On、the、way一共有3个英文词。', { titleOnly: true, topic: '标题辨认' }),
+  makeJudge('en-u3-15', 'en-u3', 'Unit 3 · On the way', 'room在Unit 3标题“On the way”中。', false, 'room属于Unit 2标题“My room”。', { titleOnly: true, topic: '标题判断' }),
+  makeTextInput('en-u3-16', 'en-u3', 'Unit 3 · On the way', '请写出“On the way”的第一个词。', 'on', '标题的第一个词是On。', { titleOnly: true, topic: '标题填空' }),
+  makeTextInput('en-u3-17', 'en-u3', 'Unit 3 · On the way', '请写出“On the way”的第二个词。', 'the', '标题的第二个词是the。', { titleOnly: true, topic: '标题填空' }),
+  makeJudge('en-u3-18', 'en-u3', 'Unit 3 · On the way', 'way在标题短语中和“路”有关。', true, 'way在on the way中可以表示“路”。', { titleOnly: true, topic: '标题判断' }),
+  makeOrder('en-u3-19', 'en-u3', 'Unit 3 · On the way', '请把反向排列的标题词排成正确顺序。', ['way', 'the', 'On'], [2, 1, 0], '正确标题是On the way。', { titleOnly: true, topic: '标题排序' }),
+  makeTextInput('en-u3-20', 'en-u3', 'Unit 3 · On the way', '请写出Unit 3的英文标题。', 'On the way', 'Unit 3的标题是On the way。', { titleOnly: true, topic: '标题填空' })
+];
+
+DAILY_QUESTIONS.push(...EXTRA_QUESTIONS);
+
+// 按单元交错排列基础题和补充题，让孩子从每单元一开始就遇到不同题型。
+const MIXED_QUESTIONS = ACTIVE_UNIT_IDS.flatMap((unitId) => {
+  const unitQuestions = DAILY_QUESTIONS.filter((question) => question.unitId === unitId);
+  const mixed = [];
+  for (let index = 0; index < unitQuestions.length / 2; index += 1) {
+    mixed.push(unitQuestions[index], unitQuestions[index + unitQuestions.length / 2]);
+  }
+  return mixed;
+});
+DAILY_QUESTIONS.splice(0, DAILY_QUESTIONS.length, ...MIXED_QUESTIONS);
+
 const QUESTION_BY_ID = new Map(DAILY_QUESTIONS.map((question) => [question.id, question]));
-const STORAGE_KEY = 'little-practice-station-v4';
+const STORAGE_KEY = 'little-practice-station-v5';
 
 const todayKey = () => {
   const date = new Date();
@@ -372,11 +530,15 @@ function normalize(value) {
 
 function isCorrect(question, value) {
   if (question.kind === 'input') return normalize(value) === normalize(question.answer);
+  if (question.kind === 'order') {
+    return Array.isArray(value) && value.length === question.answer.length && value.every((item, index) => Number(item) === Number(question.answer[index]));
+  }
   return Number(value) === Number(question.answer);
 }
 
 function answerText(question) {
   if (question.kind === 'input') return question.answerText || question.answer;
+  if (question.kind === 'order') return question.answerText;
   return question.options[question.answer];
 }
 
@@ -485,12 +647,24 @@ function renderQuestion() {
   if (question.kind === 'input') {
     const inputValue = isAnswered ? result.given : (pending ?? '');
     mainContent += `<div class="fill-answer">
-      <input id="answerInput" inputmode="numeric" autocomplete="off" value="${escapeHTML(inputValue)}" placeholder="${escapeHTML(question.placeholder || '写出答案')}" aria-label="输入答案" ${isAnswered ? 'readonly' : ''} />
+      <input id="answerInput" inputmode="${escapeHTML(question.inputMode || 'numeric')}" autocomplete="off" value="${escapeHTML(inputValue)}" placeholder="${escapeHTML(question.placeholder || '写出答案')}" aria-label="输入答案" ${isAnswered ? 'readonly' : ''} />
       ${question.unitLabel ? `<span class="fill-unit">${escapeHTML(question.unitLabel)}</span>` : ''}
     </div>`;
+  } else if (question.kind === 'order') {
+    const orderSelection = Array.isArray(selected) ? selected : [];
+    mainContent += `<div class="order-instruction">请按正确顺序依次点击下面的内容。</div>
+      <div class="order-selected">${orderSelection.length ? `已选：${orderSelection.map((index) => `<span>${orderSelection.indexOf(index) + 1}. ${escapeHTML(question.items[index])}</span>`).join('')}` : '<span class="order-placeholder">还没有选择</span>'}</div>
+      <div class="order-grid" role="list" aria-label="排序选项">${question.items.map((item, index) => {
+        const position = orderSelection.indexOf(index);
+        const classes = ['order-button'];
+        if (position >= 0) classes.push('selected');
+        return `<button class="${classes.join(' ')}" data-order-index="${index}" type="button" ${isAnswered || position >= 0 ? 'disabled' : ''}><span class="order-number">${position >= 0 ? position + 1 : '·'}</span><span>${escapeHTML(item)}</span></button>`;
+      }).join('')}</div>
+      ${!isAnswered && orderSelection.length ? '<button class="clear-order" data-action="clear-order" type="button">重新排序</button>' : ''}`;
   } else {
-    const letters = ['A', 'B', 'C', 'D'];
-    mainContent += `<div class="options-grid" role="radiogroup" aria-label="答案选项">${question.options.map((option, index) => {
+    const letters = question.kind === 'judge' ? ['✓', '×'] : ['A', 'B', 'C', 'D'];
+    const optionClass = question.kind === 'judge' ? ' judge-options' : '';
+    mainContent += `<div class="options-grid${optionClass}" role="radiogroup" aria-label="答案选项">${question.options.map((option, index) => {
       const isSelected = selected !== null && selected !== undefined && Number(selected) === index;
       const isRight = isAnswered && index === question.answer;
       const isWrong = isAnswered && isSelected && !result.correct;
@@ -522,7 +696,7 @@ function renderQuestion() {
       <span class="question-label ${meta.labelClass}"><span class="label-icon">${escapeHTML(question.icon)}</span>${escapeHTML(meta.name)} · ${escapeHTML(question.unit)}</span>
       <span class="question-number">第 ${numberText} 题 · ${question.points} 分</span>
     </div>
-    <div class="question-lesson">${escapeHTML(question.lesson)} · ${escapeHTML(question.topic)}</div>
+    <div class="question-lesson">${escapeHTML(question.lesson)} · ${escapeHTML(question.topic)} · ${escapeHTML(question.typeLabel || '练习')}</div>
     <h3>${escapeHTML(question.prompt)}</h3>
     ${titleOnlyNote}
     ${mainContent}
@@ -536,7 +710,11 @@ function renderQuestion() {
 
   const checkButton = questionPanel.querySelector('[data-action="check"]');
   if (checkButton) {
-    const hasSelection = question.kind === 'input' ? Boolean(pending) : pending !== null && pending !== undefined;
+    const hasSelection = question.kind === 'input'
+      ? Boolean(pending)
+      : question.kind === 'order'
+        ? Array.isArray(pending) && pending.length === question.items.length
+        : pending !== null && pending !== undefined;
     checkButton.disabled = !hasSelection;
   }
 }
@@ -587,8 +765,12 @@ function checkAnswer() {
     const input = document.querySelector('#answerInput');
     value = input ? input.value.trim() : value;
   }
+  if (question.kind === 'order' && (!Array.isArray(value) || value.length !== question.items.length)) {
+    showToast('请先按顺序选完所有内容');
+    return;
+  }
   if (value === null || value === '') {
-    showToast('先选一个答案，再来检查吧');
+    showToast(question.kind === 'input' ? '先写下答案，再来检查吧' : '先选完答案，再来检查吧');
     return;
   }
 
@@ -726,6 +908,20 @@ document.addEventListener('click', (event) => {
     return;
   }
 
+  const orderOption = event.target.closest('[data-order-index]');
+  if (orderOption && !orderOption.disabled) {
+    const question = getCurrentQuestion();
+    if (!question || question.kind !== 'order') return;
+    const selectedOrder = draftAnswer && draftAnswer.id === question.id && Array.isArray(draftAnswer.value)
+      ? [...draftAnswer.value]
+      : [];
+    const index = Number(orderOption.dataset.orderIndex);
+    if (!selectedOrder.includes(index)) selectedOrder.push(index);
+    draftAnswer = { id: question.id, value: selectedOrder };
+    renderQuestion();
+    return;
+  }
+
   const option = event.target.closest('[data-option]');
   if (option && !option.disabled) {
     const question = getCurrentQuestion();
@@ -743,6 +939,13 @@ document.addEventListener('click', (event) => {
     if (type === 'previous') goPrevious();
     if (type === 'retry') retryQuestion();
     if (type === 'restart') restartGroup();
+    if (type === 'clear-order') {
+      const question = getCurrentQuestion();
+      if (question?.kind === 'order') {
+        draftAnswer = { id: question.id, value: [] };
+        renderQuestion();
+      }
+    }
     return;
   }
 

@@ -432,3 +432,98 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgba(244, 200, 93
 }
 .unit-choice.locked .unit-status b { color: #c8ccc8; }
 .unit-status { font-size: 8px; }
+
+/* Mixed question types */
+.order-instruction {
+  margin: -4px 0 9px;
+  color: #8b999a;
+  font-size: 11px;
+}
+.order-selected {
+  min-height: 42px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: 700px;
+  margin-bottom: 10px;
+  padding: 7px 9px;
+  border: 1px dashed #cfe1da;
+  border-radius: 9px;
+  background: #f6fbf8;
+  color: #65877f;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.order-selected span {
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: #e1f2ea;
+}
+.order-placeholder { color: #aab7b4; }
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  max-width: 700px;
+}
+.order-button {
+  min-height: 47px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  color: #68787e;
+  border: 1px solid #e9e7e0;
+  border-radius: 10px;
+  background: #fdfcf8;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.45;
+  transition: .18s ease;
+}
+.order-button:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: #bdcec9;
+  background: #f8fbf8;
+  transform: translateY(-1px);
+}
+.order-button.selected {
+  color: #2f756b;
+  border-color: #8ec9b9;
+  background: #eaf8f2;
+}
+.order-button:disabled { cursor: default; opacity: .86; }
+.order-number {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 7px;
+  color: #a2abad;
+  background: #f0f0eb;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+}
+.order-button.selected .order-number { color: #fff; background: var(--teal); }
+.clear-order {
+  min-height: 28px;
+  margin-top: 8px;
+  padding: 0 9px;
+  color: #7b9792;
+  border: 1px solid #d5e5df;
+  border-radius: 7px;
+  background: #f8fcfa;
+  font-size: 10px;
+}
+.clear-order:hover { color: var(--teal-dark); border-color: #a9d2c6; }
+.judge-options { max-width: 460px; }
+.judge-options .option-button { min-height: 55px; }
+.judge-options .option-letter { font-size: 14px; }
+
+@media (max-width: 520px) {
+  .order-grid { grid-template-columns: 1fr; }
+  .order-button { min-height: 44px; }
+}
