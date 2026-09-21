@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f4ed" />
+    <meta name="description" content="给上海二年级小朋友的上学期语文、数学、英语每日练习。" />
+    <title>小小练习站 · 沪上二年级</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="主导航">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div>
+            <strong>小小练习站</strong>
+            <small>沪上二年级</small>
+          </div>
+        </div>
+
+        <div class="hello-card">
+          <div class="hello-sun" aria-hidden="true">✦</div>
+          <div>
+            <span>小朋友你好</span>
+            <strong>今天也要加油呀！</strong>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="home" type="button">
+            <span class="nav-icon" aria-hidden="true">⌂</span>
+            <span>今日练习</span>
+            <span class="nav-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="nav-item" data-view="subjects" type="button">
+            <span class="nav-icon book-icon" aria-hidden="true">▤</span>
+            <span>按学科练习</span>
+            <span class="nav-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="nav-item" data-view="mistakes" type="button">
+            <span class="nav-icon" aria-hidden="true">⌕</span>
+            <span>错题本</span>
+            <span class="count-pill" id="mistakeCount">0</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+        <div class="weekly-card">
+          <div class="weekly-heading">
+            <span>本周小目标</span>
+            <span class="leaf-mark" aria-hidden="true">✿</span>
+          </div>
+          <div class="weekly-progress-line">
+            <div class="progress-track"><span id="weekProgressBar"></span></div>
+            <strong id="weekProgressText">0%</strong>
+          </div>
+          <p>每天完成一点点，周末就会发现自己很棒！</p>
+        </div>
+        <p class="sidebar-footnote">2026—2027 学年 · 第一学期</p>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand">
+            <div class="brand-mark small" aria-hidden="true"><span></span><span></span><span></span></div>
+            <strong>小小练习站</strong>
+          </div>
+          <div class="breadcrumbs"><span>学习空间</span><b>/</b><strong id="breadcrumbCurrent">今日练习</strong></div>
+          <button class="parent-button" id="openReport" type="button">
+            <span class="report-icon" aria-hidden="true">◒</span>
+            <span>家长小报告</span>
+          </button>
+        </header>
+
+        <div class="content-wrap">
+          <section class="view active" id="homeView" aria-labelledby="homeTitle">
+            <div class="hero">
+              <div class="hero-copy">
+                <div class="eyebrow"><span class="eyebrow-dot"></span>2026—2027 学年 · 第一学期</div>
+                <h1 id="homeTitle">今天的练习，<br /><em>轻松做一点</em></h1>
+                <p>语文、数学、英语各来几题，<br class="desktop-break" />把会的变得更熟练。</p>
+                <div class="hero-actions">
+                  <button class="primary-button" id="startToday" type="button">开始今日练习 <span aria-hidden="true">→</span></button>
+                  <span class="time-note"><span class="tiny-clock" aria-hidden="true">◷</span> 约 15 分钟</span>
+                </div>
+              </div>
+              <div class="hero-illustration" aria-hidden="true">
+                <div class="sun-disc"></div>
+                <div class="cloud cloud-one"></div>
+                <div class="cloud cloud-two"></div>
+                <div class="hill hill-back"></div>
+                <div class="hill hill-front"></div>
+                <div class="pencil-character">
+                  <div class="pencil-top"></div>
+                  <div class="pencil-body"><span class="pencil-band"></span><span class="pencil-face"><i></i><i></i><b></b></span></div>
+                  <div class="pencil-point"></div>
+                  <div class="arm arm-left"></div><div class="arm arm-right"></div>
+                </div>
+                <span class="spark spark-one">✦</span><span class="spark spark-two">·</span><span class="spark spark-three">✧</span>
+              </div>
+            </div>
+
+            <div class="stat-row" aria-label="学习概览">
+              <div class="stat-item">
+                <div class="stat-icon coral-icon" aria-hidden="true">✓</div>
+                <div><span>今日完成</span><strong><b id="completedStat">0</b> / 9 题</strong></div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-icon yellow-icon" aria-hidden="true">★</div>
+                <div><span>连续练习</span><strong><b id="streakStat">0</b> 天</strong></div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-icon teal-icon" aria-hidden="true">◎</div>
+                <div><span>本次正确率</span><strong><b id="accuracyStat">—</b></strong></div>
+              </div>
+              <div class="stat-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">小小任务单</span>
+                <h2>今日练习</h2>
+              </div>
+              <span class="task-progress" id="taskProgress">0 / 9 已完成</span>
+            </div>
+
+            <div class="subject-tabs" role="tablist" aria-label="选择练习学科">
+              <button class="subject-tab all-tab active" data-filter="all" role="tab" aria-selected="true" type="button"><span class="tab-icon">✦</span> 全部 <small>9 题</small></button>
+              <button class="subject-tab chinese-tab" data-filter="chinese" role="tab" aria-selected="false" type="button"><span class="tab-icon">语</span> 语文 <small>3 题</small></button>
+              <button class="subject-tab math-tab" data-filter="math" role="tab" aria-selected="false" type="button"><span class="tab-icon">＋</span> 数学 <small>3 题</small></button>
+              <button class="subject-tab english-tab" data-filter="english" role="tab" aria-selected="false" type="button"><span class="tab-icon">A</span> 英语 <small>3 题</small></button>
+            </div>
+
+            <div class="practice-grid">
+              <div class="question-panel" id="questionPanel">
+                <!-- Question content is rendered by app.js. -->
+              </div>
+              <aside class="right-rail">
+                <div class="rail-card focus-card">
+                  <div class="rail-card-title"><span>今日小提醒</span><span class="sun-small" aria-hidden="true">☼</span></div>
+                  <div class="focus-note">
+                    <span class="note-number">01</span>
+                    <p>读题时圈出<strong>关键词</strong>，再动笔，会更不容易漏掉条件。</p>
+                  </div>
+                  <div class="focus-note second-note">
+                    <span class="note-number">02</span>
+                    <p>做完以后再检查一遍，给自己一个<strong>满分机会</strong>。</p>
+                  </div>
+                </div>
+                <div class="rail-card subject-mini-card">
+                  <div class="rail-card-title"><span>三科进度</span><span class="mini-arrow">↗</span></div>
+                  <div class="mini-subject-list" id="miniSubjectList"></div>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="view" id="subjectsView" aria-labelledby="subjectsTitle" hidden>
+            <div class="page-intro">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-dot"></span>按自己的节奏来</div>
+                <h1 id="subjectsTitle">想练哪一科？</h1>
+                <p>每一组都从基础开始，做对了就给自己一个小勾勾。</p>
+              </div>
+              <div class="page-sticker" aria-hidden="true"><span>今天</span><strong>慢慢来<br />也很棒</strong></div>
+            </div>
+            <div class="subject-cards">
+              <article class="subject-card large-chinese">
+                <div class="subject-card-top"><span class="large-subject-icon">语</span><span class="subject-status" id="chineseCardStatus">0 / 3</span></div>
+                <h2>语文</h2><p>字词积累 · 句子练习 · 阅读小站</p>
+                <div class="card-decoration chinese-decoration" aria-hidden="true"><span>字</span><span>词</span><span>读</span></div>
+                <button class="card-button" data-subject-start="chinese" type="button">开始练习 <span>→</span></button>
+              </article>
+              <article class="subject-card large-math">
+                <div class="subject-card-top"><span class="large-subject-icon">＋</span><span class="subject-status" id="mathCardStatus">0 / 3</span></div>
+                <h2>数学</h2><p>口算小达人 · 图形与应用题</p>
+                <div class="card-decoration math-decoration" aria-hidden="true"><span>＋</span><span>−</span><span>×</span></div>
+                <button class="card-button" data-subject-start="math" type="button">开始练习 <span>→</span></button>
+              </article>
+              <article class="subject-card large-english">
+                <div class="subject-card-top"><span class="large-subject-icon">A</span><span class="subject-status" id="englishCardStatus">0 / 3</span></div>
+                <h2>英语</h2><p>单词认读 · 日常问候 · 简单句型</p>
+                <div class="card-decoration english-decoration" aria-hidden="true"><span>Hi!</span><span>ABC</span></div>
+                <button class="card-button" data-subject-start="english" type="button">开始练习 <span>→</span></button>
+              </article>
+            </div>
+            <div class="study-tip"><span class="tip-star" aria-hidden="true">✦</span><div><strong>给小朋友的建议</strong><p>每天选一科认真做完，比一次做很多、却没有检查更有效哦。</p></div><span class="tip-pencil" aria-hidden="true">✎</span></div>
+          </section>
+
+          <section class="view" id="mistakesView" aria-labelledby="mistakesTitle" hidden>
+            <div class="page-intro mistakes-intro">
+              <div>
+                <div class="eyebrow"><span class="eyebrow-dot coral-dot"></span>把不会的变成会的</div>
+                <h1 id="mistakesTitle">我的错题本</h1>
+                <p>错一次没关系，订正以后就多掌握一个小知识。</p>
+              </div>
+              <div class="mistake-count-big"><strong id="mistakeBigCount">0</strong><span>道待复习</span></div>
+            </div>
+            <div class="mistakes-list" id="mistakesList"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="report-modal" id="reportModal" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+        <button class="modal-close" data-close-modal type="button" aria-label="关闭">×</button>
+        <div class="modal-sun" aria-hidden="true">✦</div>
+        <span class="modal-kicker">给家长的小报告</span>
+        <h2 id="reportTitle">今天的小脚印</h2>
+        <p class="modal-lede">练习不在多，坚持一点点就能看到变化。</p>
+        <div class="report-summary"><div class="report-ring" id="reportRing"><strong id="reportPercent">0%</strong><span>今日完成</span></div><div class="report-copy"><strong id="reportSummaryTitle">还没有开始</strong><p id="reportSummaryText">陪孩子先完成一道题，给今天一个轻松的开始吧。</p></div></div>
+        <div class="report-subjects" id="reportSubjects"></div>
+        <button class="primary-button full-button" data-close-modal type="button">继续练习 <span>→</span></button>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
