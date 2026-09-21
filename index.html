@@ -79,9 +79,9 @@
               <div class="hero-copy">
                 <div class="eyebrow"><span class="eyebrow-dot"></span>2026—2027 学年 · 第一学期</div>
                 <h1 id="homeTitle">今天的练习，<br /><em>轻松做一点</em></h1>
-                <p>按已核对的教材单元来练，<br class="desktop-break" />把今天学过的变得更熟练。</p>
+                <p>按学科、单元来练，<br class="desktop-break" />开学先从第 1 单元开始。</p>
                 <div class="hero-actions">
-                  <button class="primary-button" id="startToday" type="button">开始今日练习 <span aria-hidden="true">→</span></button>
+                  <button class="primary-button" id="startToday" type="button">开始开学练习 <span aria-hidden="true">→</span></button>
                   <span class="time-note"><span class="tiny-clock" aria-hidden="true">◷</span> 约 20 分钟</span>
                 </div>
               </div>
@@ -105,7 +105,7 @@
               <div class="notice-icon" aria-hidden="true">!</div>
               <div class="notice-copy">
                 <strong>先看一眼教材版本</strong>
-                <p>本页按 2026—2027 学年第一学期的已核对目录整理：语文为统编版（2024），数学为沪少儿《数学（试用本）》；上海英语由学校选用版本，英语题目前只使用“沪教版（五四制·2024）新教材”公开目录中已核对的单元标题和标题词义。请家长按孩子的书封、目录核对，英语暂不能代表牛津上海版或新世纪版。</p>
+                <p>本页按 2026—2027 学年第一学期的已核对目录整理：语文为统编版（2024），数学为沪少儿《数学（试用本）》；上海英语由学校选用版本，英语题目前只使用“沪教版（五四制·2024）新教材”公开目录中已核对的单元标题和标题词义。开学阶段默认只练三科第 1 单元；请按孩子的书封、目录和老师进度核对，英语暂不能代表牛津上海版或新世纪版。</p>
                 <div class="notice-links"><a href="https://edu.sh.gov.cn/xxgk2_zdgz_jcjy_04/20240801/bb522c1b161b441281dba8bfe9296b36.html" target="_blank" rel="noreferrer">上海市教委用书目录</a><span>·</span><a href="https://www.dzskb.com/tbb54xxywes.html" target="_blank" rel="noreferrer">语文免费目录</a><span>·</span><a href="https://www.zxxk.com/docpack/3530241.html" target="_blank" rel="noreferrer">数学单元目录</a><span>·</span><a href="https://www.zxxk.com/docpack/3513557.html" target="_blank" rel="noreferrer">英语公开备课目录</a></div>
                 <details class="curriculum-details">
                   <summary>查看已核对的语文八个单元</summary>
@@ -126,7 +126,7 @@
             <div class="stat-row" aria-label="学习概览">
               <div class="stat-item">
                 <div class="stat-icon coral-icon" aria-hidden="true">✓</div>
-                <div><span>今日完成</span><strong><b id="completedStat">0</b> / <span id="totalQuestionCount" class="stat-total">25</span> 题</strong></div>
+                <div><span>当前组完成</span><strong><b id="completedStat">0</b> / <span id="totalQuestionCount" class="stat-total">3</span> 题</strong></div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
@@ -146,11 +146,12 @@
                 <span class="section-kicker">小小任务单</span>
                 <h2>今日练习</h2>
               </div>
-              <span class="task-progress" id="taskProgress">0 / 25 已完成</span>
+              <span class="task-progress" id="taskProgress">开学起步 · 0 / 3 已完成</span>
             </div>
 
             <div class="subject-tabs" role="tablist" aria-label="选择练习学科">
-              <button class="subject-tab all-tab active" data-filter="all" role="tab" aria-selected="true" type="button"><span class="tab-icon">✦</span> 全部 <small id="allQuestionCount">25 题</small></button>
+              <button class="subject-tab starter-tab active" data-filter="starter" role="tab" aria-selected="true" type="button"><span class="tab-icon">☀</span> 开学起步 <small id="starterQuestionCount">3 题</small></button>
+              <button class="subject-tab all-tab" data-filter="all" role="tab" aria-selected="false" type="button"><span class="tab-icon">✦</span> 全部 <small id="allQuestionCount">25 题</small></button>
               <button class="subject-tab chinese-tab" data-filter="chinese" role="tab" aria-selected="false" type="button"><span class="tab-icon">语</span> 语文 <small id="chineseQuestionCount">8 题</small></button>
               <button class="subject-tab math-tab" data-filter="math" role="tab" aria-selected="false" type="button"><span class="tab-icon">＋</span> 数学 <small id="mathQuestionCount">7 题</small></button>
               <button class="subject-tab english-tab" data-filter="english" role="tab" aria-selected="false" type="button"><span class="tab-icon">A</span> 英语 <small id="englishQuestionCount">10 题</small></button>
@@ -185,7 +186,7 @@
               <div>
                 <div class="eyebrow"><span class="eyebrow-dot"></span>按自己的节奏来</div>
                 <h1 id="subjectsTitle">想练哪一科？</h1>
-                <p>每一组都对应一个已核对的教材单元；做前先看看孩子手里的版本。</p>
+                <p>按学科查看单元。不同学校进度可能不同，开学先做第 1 单元，其余单元按老师进度选择。</p>
               </div>
               <div class="page-sticker" aria-hidden="true"><span>今天</span><strong>慢慢来<br />也很棒</strong></div>
             </div>
@@ -209,6 +210,13 @@
                 <button class="card-button" data-subject-start="english" type="button">开始练习 <span>→</span></button>
               </article>
             </div>
+            <section class="unit-groups" aria-labelledby="unitGroupsTitle">
+              <div class="unit-groups-heading">
+                <div><span class="section-kicker">教材目录</span><h2 id="unitGroupsTitle">按单元选择练习</h2></div>
+                <span class="unit-groups-note">第 1 单元标为开学优先</span>
+              </div>
+              <div id="unitGroups"></div>
+            </section>
             <div class="study-tip"><span class="tip-star" aria-hidden="true">✦</span><div><strong>给小朋友的建议</strong><p>每天选一科认真做完，比一次做很多、却没有检查更有效哦。英语如果和学校目录不同，请先暂停并核对书封。</p></div><span class="tip-pencil" aria-hidden="true">✎</span></div>
           </section>
 

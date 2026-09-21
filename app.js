@@ -336,8 +336,47 @@ const SUBJECTS = {
   english: { name: '英语', short: 'A', labelClass: 'english-label', progressClass: 'english-progress' }
 };
 const SUBJECT_ORDER = Object.keys(SUBJECTS);
+
+// One question is kept for each unit in the small practice bank. The catalog
+// below keeps the navigation unit-based even when a school is still at the
+// beginning of term. More lessons can be added to a unit without changing the
+// progress and navigation model.
+const UNIT_CATALOG = {
+  chinese: [
+    { id: 'ch-u1', title: '第一单元·阅读', lessons: '小蝌蚪找妈妈、我是什么、植物妈妈有办法' },
+    { id: 'ch-u2', title: '第二单元·识字', lessons: '场景歌、树之歌、拍手歌、田家四季歌' },
+    { id: 'ch-u3', title: '第三单元·阅读', lessons: '彩虹、去外婆家、数星星的孩子' },
+    { id: 'ch-u4', title: '第四单元·阅读', lessons: '古诗二首、黄山奇石、日月潭、葡萄沟' },
+    { id: 'ch-u5', title: '第五单元·阅读', lessons: '坐井观天、寒号鸟、我要的是葫芦' },
+    { id: 'ch-u6', title: '第六单元·阅读', lessons: '八角楼上、朱德的扁担、难忘的泼水节、刘胡兰' },
+    { id: 'ch-u7', title: '第七单元·阅读', lessons: '古诗二首（江雪、敕勒歌）、雾在哪里、雪孩子' },
+    { id: 'ch-u8', title: '第八单元·阅读', lessons: '称赞、纸船和风筝、快乐的小河' }
+  ],
+  math: [
+    { id: 'ma-u1', title: '第一单元·100以内数的加减法（二）', lessons: '两位数减法、比多与少' },
+    { id: 'ma-u2', title: '第二单元·欢乐购物街', lessons: '认识人民币、一起来购物' },
+    { id: 'ma-u3', title: '第三单元·表内乘法', lessons: '乘法引入、5的乘法、2、4、8的乘法、7的乘法' },
+    { id: 'ma-u4', title: '第四单元·我的学校我的家', lessons: '方位与位置' },
+    { id: 'ma-u5', title: '第五单元·分类', lessons: '按特征分类' },
+    { id: 'ma-u6', title: '第六单元·数学广场', lessons: '有序思考与搭配' },
+    { id: 'ma-u7', title: '第七单元·复习', lessons: '本册知识回顾' }
+  ],
+  english: [
+    { id: 'en-u1', title: 'Unit 1 · My morning', lessons: '单元标题词义练习' },
+    { id: 'en-u2', title: 'Unit 2 · My room', lessons: '单元标题词义练习' },
+    { id: 'en-u3', title: 'Unit 3 · On the way', lessons: '单元标题词义练习' },
+    { id: 'en-u4', title: 'Unit 4 · Playing sports', lessons: '单元标题词义练习' },
+    { id: 'en-u5', title: 'Unit 5 · In the sky', lessons: '单元标题词义练习' },
+    { id: 'en-u6', title: 'Unit 6 · In the sea', lessons: '单元标题词义练习' },
+    { id: 'en-u7', title: 'Unit 7 · Seasons', lessons: '单元标题词义练习' },
+    { id: 'en-u8', title: 'Unit 8 · Yummy fruit', lessons: '单元标题词义练习' },
+    { id: 'en-u9', title: 'Unit 9 · The five senses', lessons: '单元标题词义练习' },
+    { id: 'en-u10', title: 'Unit 10 · This is me', lessons: '单元标题词义练习' }
+  ]
+};
+const STARTER_UNIT_IDS = ['ch-u1', 'ma-u1', 'en-u1'];
 const QUESTION_BY_ID = new Map(DAILY_QUESTIONS.map((question) => [question.id, question]));
-const STORAGE_KEY = 'little-practice-station-v2';
+const STORAGE_KEY = 'little-practice-station-v3';
 
 const todayKey = () => {
   const date = new Date();
@@ -369,7 +408,7 @@ function loadState() {
 }
 
 let state = loadState();
-let currentFilter = 'all';
+let currentFilter = 'starter';
 let currentIndex = 0;
 let draftAnswer = null;
 let completionFilter = null;
@@ -399,8 +438,18 @@ function escapeHTML(value) {
   }[character]));
 }
 
+function questionUnitId(question) {
+  return question.unitId || question.id;
+}
+
 function getQuestions(filter = currentFilter) {
-  return filter === 'all' ? DAILY_QUESTIONS : DAILY_QUESTIONS.filter((question) => question.subject === filter);
+  if (filter === 'all') return DAILY_QUESTIONS;
+  if (filter === 'starter') return DAILY_QUESTIONS.filter((question) => STARTER_UNIT_IDS.includes(questionUnitId(question)));
+  if (filter.startsWith('unit:')) {
+    const unitId = filter.slice(5);
+    return DAILY_QUESTIONS.filter((question) => questionUnitId(question) === unitId);
+  }
+  return DAILY_QUESTIONS.filter((question) => question.subject === filter);
 }
 
 function getCurrentQuestion() {
@@ -408,8 +457,8 @@ function getCurrentQuestion() {
   return questions[currentIndex];
 }
 
-function completedCount() {
-  return DAILY_QUESTIONS.filter((question) => state.answers[question.id]).length;
+function completedCount(filter = 'all') {
+  return getQuestions(filter).filter((question) => state.answers[question.id]).length;
 }
 
 function subjectQuestions(subject) {
@@ -420,12 +469,28 @@ function subjectCompleted(subject) {
   return subjectQuestions(subject).filter((question) => state.answers[question.id]).length;
 }
 
-function answeredCount() {
-  return DAILY_QUESTIONS.filter((question) => state.answers[question.id]).length;
+function answeredCount(filter = 'all') {
+  return getQuestions(filter).filter((question) => state.answers[question.id]).length;
 }
 
-function correctCount() {
-  return DAILY_QUESTIONS.filter((question) => state.answers[question.id]?.correct).length;
+function correctCount(filter = 'all') {
+  return getQuestions(filter).filter((question) => state.answers[question.id]?.correct).length;
+}
+
+function getUnitMeta(unitId) {
+  for (const subject of SUBJECT_ORDER) {
+    const unit = UNIT_CATALOG[subject].find((item) => item.id === unitId);
+    if (unit) return { ...unit, subject };
+  }
+  return null;
+}
+
+function filterLabel(filter) {
+  if (filter === 'starter') return '开学起步';
+  if (filter === 'all') return '全部题目';
+  if (SUBJECTS[filter]) return SUBJECTS[filter].name;
+  if (filter.startsWith('unit:')) return getUnitMeta(filter.slice(5))?.title || '当前单元';
+  return '当前练习组';
 }
 
 function recordActivity() {
@@ -481,25 +546,58 @@ function subjectProgressMarkup(subject) {
   </div>`;
 }
 
+function unitQuestions(unitId) {
+  return DAILY_QUESTIONS.filter((question) => questionUnitId(question) === unitId);
+}
+
+function renderUnitGroups() {
+  const container = document.querySelector('#unitGroups');
+  if (!container) return;
+  container.innerHTML = SUBJECT_ORDER.map((subject) => {
+    const meta = SUBJECTS[subject];
+    const units = UNIT_CATALOG[subject];
+    return `<section class="unit-group ${subject}-unit-group" aria-labelledby="${subject}UnitsTitle">
+      <div class="unit-group-title">
+        <span class="mini-subject-icon ${subject}">${meta.short}</span>
+        <div><h3 id="${subject}UnitsTitle">${escapeHTML(meta.name)}</h3><p>${subject === 'english' ? '学校版本不同，请先核对书封' : '按教材目录逐单元练习'}</p></div>
+      </div>
+      <div class="unit-list">${units.map((unit, index) => {
+        const questions = unitQuestions(unit.id);
+        const done = questions.filter((question) => state.answers[question.id]).length;
+        const total = questions.length;
+        const isPriority = STARTER_UNIT_IDS.includes(unit.id);
+        const status = done === total && total ? '已完成' : `${done} / ${total}`;
+        return `<button class="unit-choice${isPriority ? ' priority' : ''}" data-unit-start="${escapeHTML(unit.id)}" type="button" aria-label="练习${escapeHTML(unit.title)}">
+          <span class="unit-index">${String(index + 1).padStart(2, '0')}</span>
+          <span class="unit-copy"><strong>${escapeHTML(unit.title)}</strong><small>${escapeHTML(unit.lessons)}</small></span>
+          <span class="unit-status">${isPriority ? '<em>开学优先</em>' : escapeHTML(status)}<b aria-hidden="true">→</b></span>
+        </button>`;
+      }).join('')}</div>
+    </section>`;
+  }).join('');
+}
+
 function updateDashboard() {
-  const total = DAILY_QUESTIONS.length;
-  const completed = completedCount();
-  const answered = answeredCount();
-  const accuracy = answered ? `${Math.round((correctCount() / answered) * 100)}%` : '—';
+  const scopeQuestions = getQuestions(currentFilter);
+  const total = scopeQuestions.length;
+  const completed = scopeQuestions.filter((question) => state.answers[question.id]).length;
+  const answered = answeredCount(currentFilter);
+  const accuracy = answered ? `${Math.round((correctCount(currentFilter) / answered) * 100)}%` : '—';
   const progress = total ? Math.round((completed / total) * 100) : 0;
 
   document.querySelector('#completedStat').textContent = completed;
   document.querySelector('#totalQuestionCount').textContent = total;
   document.querySelector('#streakStat').textContent = getStreak();
   document.querySelector('#accuracyStat').textContent = accuracy;
-  document.querySelector('#taskProgress').textContent = `${completed} / ${total} 已完成`;
+  document.querySelector('#taskProgress').textContent = `${filterLabel(currentFilter)} · ${completed} / ${total} 已完成`;
   document.querySelector('#mistakeCount').textContent = state.mistakes.length;
   document.querySelector('#mistakeBigCount').textContent = state.mistakes.length;
   document.querySelector('#weekProgressBar').style.width = `${progress}%`;
   document.querySelector('#weekProgressText').textContent = `${progress}%`;
   document.querySelector('#miniSubjectList').innerHTML = SUBJECT_ORDER.map(subjectProgressMarkup).join('');
 
-  document.querySelector('#allQuestionCount').textContent = `${total} 题`;
+  document.querySelector('#starterQuestionCount').textContent = `${getQuestions('starter').length} 题`;
+  document.querySelector('#allQuestionCount').textContent = `${DAILY_QUESTIONS.length} 题`;
   SUBJECT_ORDER.forEach((subject) => {
     const subjectTotal = subjectQuestions(subject).length;
     const status = document.querySelector(`#${subject}CardStatus`);
@@ -507,6 +605,7 @@ function updateDashboard() {
     if (status) status.textContent = `${subjectCompleted(subject)} / ${subjectTotal}`;
     if (count) count.textContent = `${subjectTotal} 题`;
   });
+  renderUnitGroups();
 }
 
 function renderQuestion() {
@@ -603,10 +702,11 @@ function setFilter(filter, index = 0) {
     tab.classList.toggle('active', active);
     tab.setAttribute('aria-selected', String(active));
   });
+  updateDashboard();
   renderQuestion();
 }
 
-function openPractice(filter = 'all') {
+function openPractice(filter = 'starter') {
   showView('home');
   const questions = getQuestions(filter);
   const firstUnanswered = questions.findIndex((question) => !state.answers[question.id]);
@@ -726,16 +826,17 @@ function showToast(message) {
 }
 
 function updateReport() {
-  const total = DAILY_QUESTIONS.length;
-  const completed = completedCount();
+  const groupLabel = filterLabel(currentFilter);
+  const total = getQuestions(currentFilter).length;
+  const completed = completedCount(currentFilter);
   const percent = total ? Math.round((completed / total) * 100) : 0;
   const reportPercent = document.querySelector('#reportPercent');
   const ring = document.querySelector('#reportRing');
   reportPercent.textContent = `${percent}%`;
   ring.style.borderRightColor = percent > 50 ? 'var(--teal-dark)' : '#bce2d5';
   ring.style.borderTopColor = percent > 25 ? 'var(--teal-dark)' : '#bce2d5';
-  document.querySelector('#reportSummaryTitle').textContent = completed === 0 ? '还没有开始' : completed === total ? '今日任务完成！' : `已经完成 ${completed} 道题`;
-  document.querySelector('#reportSummaryText').textContent = completed === 0 ? '陪孩子先完成一道题，给今天一个轻松的开始吧。' : completed === total ? '三科都留下了认真练习的脚印，今天表现很棒！' : '保持这个节奏，做完以后记得看一眼错题解析。';
+  document.querySelector('#reportSummaryTitle').textContent = completed === 0 ? '还没有开始' : completed === total ? `${groupLabel}完成！` : `已经完成 ${completed} 道题`;
+  document.querySelector('#reportSummaryText').textContent = completed === 0 ? '陪孩子先完成当前单元，给今天一个轻松的开始吧。' : completed === total ? '这一小组留下了认真练习的脚印，今天表现很棒！' : '保持这个节奏，做完以后记得看一眼错题解析。';
   document.querySelector('#reportSubjects').innerHTML = SUBJECT_ORDER.map((subject) => {
     const done = subjectCompleted(subject);
     const subjectTotal = subjectQuestions(subject).length;
@@ -757,6 +858,12 @@ document.addEventListener('click', (event) => {
   const tab = event.target.closest('.subject-tab');
   if (tab) {
     setFilter(tab.dataset.filter);
+    return;
+  }
+
+  const unitStart = event.target.closest('[data-unit-start]');
+  if (unitStart) {
+    openPractice(`unit:${unitStart.dataset.unitStart}`);
     return;
   }
 
@@ -790,9 +897,10 @@ document.addEventListener('click', (event) => {
   if (review) {
     const question = QUESTION_BY_ID.get(review.dataset.reviewId);
     if (!question) return;
-    const index = getQuestions(question.subject).findIndex((item) => item.id === question.id);
+    const unitFilter = `unit:${questionUnitId(question)}`;
+    const index = getQuestions(unitFilter).findIndex((item) => item.id === question.id);
     showView('home');
-    setFilter(question.subject, index);
+    setFilter(unitFilter, index);
     questionPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
@@ -817,7 +925,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') document.querySelector('#reportModal').hidden = true;
 });
 
-document.querySelector('#startToday').addEventListener('click', () => openPractice('all'));
+document.querySelector('#startToday').addEventListener('click', () => openPractice('starter'));
 document.querySelector('#openReport').addEventListener('click', () => {
   updateReport();
   document.querySelector('#reportModal').hidden = false;
