@@ -13,13 +13,13 @@ const DAILY_QUESTIONS = [
     id: 'ch-u1',
     subject: 'chinese',
     unit: '第一单元·阅读',
-    lesson: '《我是什么》',
+    lesson: '《小蝌蚪找妈妈》',
     topic: '课文理解',
     icon: '语',
-    prompt: '《我是什么》里，“我”可以变成下面哪一种？',
-    options: ['云、雨、冰雹或雪', '小鸟、树和花', '书包、铅笔和橡皮'],
+    prompt: '小蝌蚪在找妈妈的过程中，先长出了哪一部分？',
+    options: ['两条后腿', '两条前腿', '一条长尾巴'],
     answer: 0,
-    explanation: '课文里的“我”是水，水会变成云、雨、冰雹和雪。'
+    explanation: '课文按成长顺序写到：小蝌蚪先长出两条后腿，后来又长出两条前腿。'
   },
   {
     id: 'ch-u2',

@@ -362,3 +362,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid rgba(244, 200, 93
   .question-lesson { margin-top: -8px; }
 }
 .stat-item strong .stat-total { display: inline; color: inherit; font-size: inherit; }
+.curriculum-details { margin-top: 8px; color: #967d54; font-size: 9px; }
+.curriculum-details summary { width: fit-content; color: #9f7939; cursor: pointer; font-weight: 700; }
+.curriculum-details ol { display: grid; gap: 3px; margin: 6px 0 0 17px; padding: 0; line-height: 1.65; }
+.curriculum-details strong { color: #86632d; }
+@media (max-width: 520px) {
+  .curriculum-details { font-size: 8px; }
+}
