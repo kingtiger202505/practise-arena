@@ -1,7 +1,8 @@
 /*
  * Unit practice packs. The first three units of each subject are the active
- * beginning-of-term scope requested by the parent. Every active unit has twenty
- * 5-point items, for a 100-point unit paper.
+ * beginning-of-term scope requested by the parent. Most active units have twenty
+ * 5-point items; the math Unit 1 extension pack uses mixed points but still
+ * totals 100 points.
  *
  * Chinese questions use checked 2024 textbook texts and stories. Mathematics
  * questions use the checked unit lesson topics. The English school version has
@@ -29,7 +30,7 @@ const UNIT_CATALOG = {
     { id: 'ch-u8', title: '第八单元·阅读', lessons: '称赞、纸船和风筝、快乐的小河', available: false }
   ],
   math: [
-    { id: 'ma-u1', title: '第一单元·100以内数的加减法（二）', lessons: '两位数减法、比多与少', available: true },
+    { id: 'ma-u1', title: '第一单元·100以内数的加减法（二）', lessons: '两位数加减、进退位、错例辨析与拓展', available: true },
     { id: 'ma-u2', title: '第二单元·欢乐购物街', lessons: '认识人民币、一起来购物', available: true },
     { id: 'ma-u3', title: '第三单元·表内乘法', lessons: '乘法引入、5的乘法、2、4、8的乘法、7的乘法', available: true },
     { id: 'ma-u4', title: '第四单元·我的学校我的家', lessons: '方位与位置', available: false },
@@ -174,6 +175,18 @@ const DAILY_QUESTIONS = [
   makeChoice('ma-u1-08', 'ma-u1', '解决问题：比多与少', '54 −（　）＝27，括号里应填几？', ['27', '81', '17'], 0, '被减数减差等于减数：54－27＝27。'),
   makeChoice('ma-u1-09', 'ma-u1', '解决问题：比多与少', '图书角有 63 本书，借走 28 本，还剩多少本？', ['35 本', '91 本', '45 本'], 0, '求还剩多少用减法：63－28＝35（本）。'),
   makeInput('ma-u1-10', 'ma-u1', '两位数退位减法', '算一算：80 − 36 =', 44, '80－36＝44，个位 0 不够减 6，需要连续退位。'),
+
+  // 数学第一单元拓展：两位数加减法的算理、错例辨析和解决问题
+  makeInput('ma-u1-21', 'ma-u1', '两位数进位加法·拓展', '算一算：38 ＋ 27 =', 65, '个位8＋7＝15，写5进1；十位3＋2＋1＝6，所以得65。', { topic: '进位加法拓展' }),
+  makeInput('ma-u1-22', 'ma-u1', '两位数退位减法·拓展', '算一算：72 − 38 =', 34, '个位2不够减8，要从十位借1个十；12－8＝4，6－3＝3，所以得34。', { topic: '退位减法拓展' }),
+  makeJudge('ma-u1-23', 'ma-u1', '进位加法·拓展', '46 ＋ 27 = 63。', false, '个位6＋7＝13，要进1，正确答案是73。', { topic: '错例辨析' }),
+  makeInput('ma-u1-24', 'ma-u1', '进位加法·拓展', '25 ＋（　）＝63，括号里应填几？', 38, '63－25＝38，所以括号里填38。', { topic: '逆向思考' }),
+  makeInput('ma-u1-25', 'ma-u1', '退位减法·拓展', '（　）−27＝45，括号里应填几？', 72, '45＋27＝72，所以括号里填72。', { topic: '逆向思考' }),
+  makeJudge('ma-u1-26', 'ma-u1', '退位减法·拓展', '54 − 28时，个位4不够减8，需要从十位借1个十。', true, '个位不够减时，要从十位借1个十，54变成4个十和14个一。', { topic: '算理判断' }),
+  makeOrder('ma-u1-27', 'ma-u1', '进位加法·拓展', '请按计算36 ＋ 28的主要步骤排列。', ['个位6＋8＝14', '个位写4并向十位进1', '十位3＋2＋1＝6', '得64'], [0, 1, 2, 3], '先算个位并进位，再算十位，最后得到64。', { topic: '计算步骤' }),
+  makeOrder('ma-u1-28', 'ma-u1', '退位减法·拓展', '请按计算52 − 27的主要步骤排列。', ['个位2不够减7', '从十位借1个十，个位变成12', '12－7＝5', '十位退位后5－2＝3', '得35'], [0, 1, 2, 3, 4], '退位减法先借1个十，再算个位和十位，结果是35。', { topic: '计算步骤' }),
+  makeInput('ma-u1-29', 'ma-u1', '解决问题·拓展', '小红有36张贴纸，又得到23张。现在一共有多少张？', 59, '36＋23＝59（张）。先算个位6＋3，再算十位3＋2。', { topic: '加法应用' }),
+  makeInput('ma-u1-30', 'ma-u1', '解决问题·拓展', '一本书有85页，小明看了38页，还剩多少页？', 47, '85－38＝47（页），求还剩多少用减法。', { topic: '减法应用' }),
 
   // 数学第二单元：欢乐购物街
   makeChoice('ma-u2-01', 'ma-u2', '认识人民币', '1 元等于多少角？', ['10 角', '1 角', '100 角'], 0, '人民币单位换算中，1 元＝10 角。'),
@@ -350,11 +363,21 @@ const EXTRA_QUESTIONS = [
 DAILY_QUESTIONS.push(...EXTRA_QUESTIONS);
 
 // 按单元交错排列基础题和补充题，让孩子从每单元一开始就遇到不同题型。
+// 数学第一单元的基础题和拓展题按不同分值合计100分：基础20题×3分，拓展10题×4分。
+DAILY_QUESTIONS.filter((question) => question.unitId === 'ma-u1').forEach((question) => {
+  const number = Number(question.id.split('-').pop());
+  question.points = number >= 21 ? 4 : 3;
+});
+
 const MIXED_QUESTIONS = ACTIVE_UNIT_IDS.flatMap((unitId) => {
   const unitQuestions = DAILY_QUESTIONS.filter((question) => question.unitId === unitId);
+  const groups = [];
+  for (let start = 0; start < unitQuestions.length; start += 10) groups.push(unitQuestions.slice(start, start + 10));
   const mixed = [];
-  for (let index = 0; index < unitQuestions.length / 2; index += 1) {
-    mixed.push(unitQuestions[index], unitQuestions[index + unitQuestions.length / 2]);
+  for (let index = 0; index < 10; index += 1) {
+    groups.forEach((group) => {
+      if (group[index]) mixed.push(group[index]);
+    });
   }
   return mixed;
 });
